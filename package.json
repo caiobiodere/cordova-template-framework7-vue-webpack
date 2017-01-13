@@ -1,20 +1,20 @@
 {
-  "name": "cordova-template",
+  "name": "cordova-template-framework7-vue-webpack",
   "version": "1.0.0",
-  "description": "A reference for creating cordova app templates.",
+  "description": "Cordova template with framework7, vue 2 and webpack 2.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/carynbear/cordova-template.git"
+    "url": "https://github.com/centrual/cordova-template-framework7-vue-webpack.git"
   },
-  "homepage": "https://github.com/carynbear/cordova-template",
+  "homepage": "https://github.com/centrual/cordova-template-framework7-vue-webpack",
   "keywords": [
     "ecosystem:cordova",
     "cordova:template"
   ],
-  "author": "Caryn Tran",
+  "author": "Oguz Ozcan",
   "license": "Apache-2.0"
 }
