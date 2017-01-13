@@ -18,8 +18,9 @@
 # under the License.
 #
 -->
-
-->![template logo](logo.png "template logo")<-
+<p align="center">
+	![template logo](logo.png "template logo")
+</p>
 
 # Framework7 - Vue - Webpack Cordova Template
 You can start your new cordova project perfectly with this template.
