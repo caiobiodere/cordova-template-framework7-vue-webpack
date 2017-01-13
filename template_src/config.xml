@@ -18,6 +18,8 @@
  under the License.
  -->
 <widget id="com.example.template" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <hook type="before_deploy" src="cordova_hooks/before_deploy.js" />
+    <hook type="before_build" src="cordova_hooks/before_build.js" />
     <name>Cordova - Framework7 - Vue - Webpack Template</name>
     <description>
         Brand new cordova project!
