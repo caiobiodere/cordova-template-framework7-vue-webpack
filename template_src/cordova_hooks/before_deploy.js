@@ -1,21 +1,18 @@
-/*
-This script runs before this commands:
-	cordova emulate
-	cordova run
-*/
-
 module.exports = function(context) {
-	const Q = context.requireCordovaModule('q')
+	const Q = context.requireCordovaModule('q'),
+				cheerio = context.requireCordovaModule('cheerio')
+	
 	let deferral = new Q.defer();
 	
-	console.log("Before Deploy Started!")
+	console.log("Before deploy hook started...")
 	
-	setTimeout(function(){
-		console.log('Before Deploy Ended!');
-		deferral.resolve();
-	}, 3000);
+	console.log(context)
 	
-	return deferral.promise;
+	setTimeout(() => {
+		deferral.resolve(null)
+	}, 6000)
+	
+	return deferral.promise
 }
 
 // index.html'de cordova.js yoksa, otomatik ekle

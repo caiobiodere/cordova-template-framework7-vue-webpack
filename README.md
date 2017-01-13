@@ -30,6 +30,10 @@ This template uses:
 * [Webpack 2](https://webpack.github.io/)
 
 
+## Minimum Requirements
+* **Cordova:** _6.0.0_
+* **Node.js:** _6.5.0_ (Supports ES6)
+
 ## Installation
 This template needs cordova. You can install cordova with:
 ``` bash
@@ -52,6 +56,10 @@ boom! :collision: you have your brand new cordova project with framework7 - vue 
 
 ---
 
+Run `npm install` for install node.js dependencies...
+
+---
+
 Now you need to add platform you want. You can add platform with this command:
 
 ```
@@ -68,16 +76,12 @@ We have some cool hooks for faster development. If you don't know what is cordov
 
 You don't need to add `<script src="cordova.js"></script>` to your `index.html`. It will be added automagically...
 
-_(Note: If you want to add cordova.js to the page, you can add.)_
-
----
-
-The second important thing is, when you run one of `cordova (run|emulate|build)` command for the first time, system will run `npm install` for install required node.js dependencies.
+_(Note: If you want to add cordova.js to the page, you can add too.)_
 
 ---
 
 ```bash
-  cordova (emulate|run) (android|ios|browser|etc...) [...args] [--live-reload]
+  cordova (emulate|run|build) (android|ios|browser|etc...) [...args] [--live-reload]
 ```
 
 #### args:
@@ -85,17 +89,7 @@ The second important thing is, when you run one of `cordova (run|emulate|build)`
 	* webpack starts to watch `src` folder.
 	* when you change any file in `src` folder, webpack will `recompile` files and `refreshes target` automagically!
 	
-* **--nobuild:**
+* **--nobuild: or build**
 	* webpack will not run.
 
-You can check [cordova_hooks/before_deploy.js](cordova_hooks/before_deploy.js) for more information.
-
----
-
-```bash
-  cordova build (android|ios|browser|etc...)
-```
-
-When you use this command, webpack compiles `src` folder to `www` folder before cordova packs your app.
-
-You can check [cordova_hooks/before_build.js](cordova_hooks/before_build.js) for more information.
+You can check [before_deploy.js](cordova_hooks/before_deploy.js) for more information.

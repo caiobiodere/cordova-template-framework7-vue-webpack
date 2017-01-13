@@ -8,5 +8,8 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^0.22.0"
+  }
 }
