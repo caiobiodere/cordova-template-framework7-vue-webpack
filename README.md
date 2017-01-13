@@ -92,4 +92,4 @@ _(Note: If you want to add cordova.js to the page, you can add too.)_
 * **--nobuild: or build**
 	* webpack will not run.
 
-You can check [before_deploy.js](cordova_hooks/before_deploy.js) for more information.
+You can check [before_cmd.js](hooks/before_cmd.js) for more information.
