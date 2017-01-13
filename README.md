@@ -19,17 +19,9 @@
 #
 -->
 
-<div align="center" markdown="1">
+![template logo](logo.png "template logo")
 
-  ![template logo](logo.png "template logo")
-
-</div>
-
-<div align="center" markdown="1">
-
-  # Framework7 - Vue - Webpack Cordova Template
-
-</div>
+# Framework7 - Vue - Webpack Cordova Template
 You can start your new cordova project perfectly with this template.
 
 This template uses:
