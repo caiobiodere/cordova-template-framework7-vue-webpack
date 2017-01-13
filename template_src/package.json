@@ -1,0 +1,12 @@
+{
+  "name": "CordovaFramework7VueWebpackTemplate",
+  "version": "1.0.0",
+  "description": "Brand new cordova project with framework7 - vue - webpack!",
+  "scripts": {
+    "default": "echo \"There is no scripts you can run with npm run command.\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "license": "ISC"
+}
