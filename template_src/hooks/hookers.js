@@ -148,13 +148,13 @@ module.exports = function (ctx) {
 	sys.checkNodeModules()
 	.then(() => sys.checkBrowserSync())
 	.then(() => {
-		let isBuild = ctx.opts.cmdLine.indexOf('cordova build') > -1,
-				isRun = ctx.opts.cmdLine.indexOf('cordova run') > -1,
-				isEmulate = ctx.opts.cmdLine.indexOf('cordova emulate') > -1,
-				isServe = ctx.opts.cmdLine.indexOf('cordova serve') > -1,
+		let isBuild = ctx.cmdLine.indexOf('cordova build') > -1,
+				isRun = ctx.cmdLine.indexOf('cordova run') > -1,
+				isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
+				isServe = ctx.cmdLine.indexOf('cordova serve') > -1,
 				isLiveReloadEnabled = ( typeof ctx.opts.options["live-reload"] != "undefined" && ctx.opts.options["live-reload"] === true ),
-				isNoBuild = ( typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true ),
-				isRelease = ( typeof ctx.opts.options["release"] != "undefined" && ctx.opts.options["release"] === true )
+				isNoBuild = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true ),
+				isRelease = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["release"] != "undefined" && ctx.opts.options["release"] === true )
 		
 		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReloadEnabled && !isNoBuild) )
 			return sys.startWebpackBuild(isRelease)

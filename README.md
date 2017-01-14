@@ -47,7 +47,7 @@ For more info about cordova installation, please [check this page](https://cordo
 Okay, you have cordova. Let's do a magic:
 
 ``` bash
-cordova create <project_create_dir> com.example.projectname "Project Name" --template cordova-template-framework7-vue-webpack
+cordova create <project_create_dir> com.example.projectname ProjectClassName --template cordova-template-framework7-vue-webpack
 ```
 
 boom! :boom: you have your brand new cordova project with framework7 - vue and webpack 2!
