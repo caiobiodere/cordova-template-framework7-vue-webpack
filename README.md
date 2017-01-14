@@ -56,8 +56,8 @@ boom! :boom: you have your brand new cordova project with framework7 - vue and w
 
 ---
 
-You don't need to use `npm install` for install node.js dependencies.
-As well as you don't need to install `cordova-plugin-browsersync` too.
+You don't need to use `npm install` manually for install node.js dependencies.
+As well as you don't need to install `cordova-plugin-browsersync` manually too.
 
 When you use one of `cordova (run|emulate|build|prepare|serve)` commands, hookers.js will install automagically these things, before run your cordova command.
 
