@@ -50,13 +50,18 @@ Okay, you have cordova. Let's do a magic:
 cordova create <project_create_dir> com.example.projectname "Project Name" --template cordova-template-framework7-vue-webpack
 ```
 
-boom! :collision: you have your brand new cordova project with framework7 - vue and webpack 2!
+boom! :boom: you have your brand new cordova project with framework7 - vue and webpack 2!
 
 ![such a wow!](https://cloud.githubusercontent.com/assets/296796/3511506/4042665c-06b0-11e4-953c-4f14c11f81ec.png "such a wow!")
 
 ---
 
-Run `npm install` for install node.js dependencies...
+You don't need to use `npm install` for install node.js dependencies.
+As well as you don't need to install `cordova-plugin-browsersync` too.
+
+When you use one of `cordova (run|emulate|build|prepare)` commands, hookers.js will install automagically these things, before run your cordova command.
+
+**Note! Important Cordova Plugin:** This template needs [cordova-plugin-browsersync](https://github.com/nparashuram/cordova-plugin-browsersync). It installs automagically when you use one of `cordova (run|emulate|build|prepare)` commands.
 
 ---
 
@@ -66,7 +71,7 @@ Now you need to add platform you want. You can add platform with this command:
 cordova platform add (browser|android|ios|etc...)
 ```
 
-**Note! Important Cordova Plugin:** This template needs [cordova-plugin-browsersync](https://github.com/nparashuram/cordova-plugin-browsersync). It installs automagically when you add platform. Please don't remove it if you don't know what you'r doing.
+And :tada:, all set!
 
 ## Usage
 You can run all cordova commands.
@@ -89,7 +94,7 @@ _(Note: If you want to add cordova.js to the page, you can add too.)_
 	* webpack starts to watch `src` folder.
 	* when you change any file in `src` folder, webpack will `recompile` files and `refreshes target` automagically!
 	
-* **--nobuild: or build**
+* **--nobuild**
 	* webpack will not run.
 
-You can check [before_cmd.js](hooks/before_cmd.js) for more information.
+You can check [hookers.js](hooks/hookers.js) for more information.
