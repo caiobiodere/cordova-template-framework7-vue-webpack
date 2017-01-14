@@ -1,0 +1,1 @@
+When you use one of `cordova (run|emulate|prepare|serve)` this folder's content will automagically generate.
