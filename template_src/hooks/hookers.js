@@ -152,13 +152,13 @@ module.exports = function (ctx) {
 				isRun = ctx.cmdLine.indexOf('cordova run') > -1,
 				isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
 				isServe = ctx.cmdLine.indexOf('cordova serve') > -1,
-				isLiveReloadEnabled = ( typeof ctx.opts.options["live-reload"] != "undefined" && ctx.opts.options["live-reload"] === true ),
+				isLiveReload = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["live-reload"] != "undefined" && ctx.opts.options["live-reload"] === true ),
 				isNoBuild = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true ),
 				isRelease = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["release"] != "undefined" && ctx.opts.options["release"] === true )
 		
-		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReloadEnabled && !isNoBuild) )
+		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReload && !isNoBuild) )
 			return sys.startWebpackBuild(isRelease)
-		else if( (isRun || isEmulate || isServe) && isLiveReloadEnabled )
+		else if( (isRun || isEmulate || isServe) && isLiveReload )
 			return sys.startWebpackWatch()
 		else
 			return sys.emptyDefer()
