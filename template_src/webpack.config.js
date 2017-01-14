@@ -78,7 +78,7 @@ let config = {
 	]
 }
 
-if (TARGET === "watch") {
+if (TARGET === "--watch") {
 	config.devtool = "eval-source-map"
 	config.watch = true
 	config.watchOptions = {
@@ -86,7 +86,7 @@ if (TARGET === "watch") {
 		poll: 500,
 		ignored: /(node_modules|www|platforms|plugins|hooks|webpack)/ //watch only src folder
 	}
-} else if (TARGET == "release") {
+} else if (TARGET == "--release") {
 	config.plugins.push(new UglifyJsPlugin({
 			cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
 			debug: true,

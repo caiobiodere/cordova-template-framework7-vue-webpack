@@ -54,14 +54,16 @@ boom! :boom: you have your brand new cordova project with framework7 - vue and w
 
 ![such a wow!](https://cloud.githubusercontent.com/assets/296796/3511506/4042665c-06b0-11e4-953c-4f14c11f81ec.png "such a wow!")
 
+**Important:** `ProjectClassName` should be written without spaces. 
+
 ---
 
 You don't need to use `npm install` manually for install node.js dependencies.
 As well as you don't need to install `cordova-plugin-browsersync` manually too.
 
-When you use one of `cordova (run|emulate|build|prepare|serve)` commands, hookers.js will install automagically these things, before run your cordova command.
+When you use one of `cordova (emulate|run|build|serve|prepare)` commands, hookers.js will install automagically these things, before run your cordova command.
 
-**Note! Important Cordova Plugin:** This template needs [cordova-plugin-browsersync](https://github.com/nparashuram/cordova-plugin-browsersync). It installs automagically when you use one of `cordova (run|emulate|build|prepare|serve)` commands.
+**Note! Important Cordova Plugin:** This template needs [cordova-plugin-browsersync](https://github.com/nparashuram/cordova-plugin-browsersync). It installs automagically when you use one of `cordova (emulate|run|build|serve|prepare)` commands.
 
 ---
 
@@ -86,11 +88,11 @@ _(Note: If you want to add cordova.js to the page, you can add too.)_
 ---
 
 ```bash
-  cordova (emulate|run|build) (android|ios|browser|etc...) [...args] [--live-reload]
+  cordova (emulate|run|build|serve|prepare) (android|ios|browser|etc...) [...args] [-- --live-reload]
 ```
 
 #### args:
-* **--live-reload:**
+* **-- --live-reload:**
 	* webpack starts to watch `src` folder.
 	* when you change any file in `src` folder, webpack will `recompile` files and `refreshes target` automagically!
 	

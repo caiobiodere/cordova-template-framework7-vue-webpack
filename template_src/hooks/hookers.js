@@ -80,7 +80,7 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec(webpackPath + (isRelease ? ' release' : '') , {cwd: ctx.opts.projectRoot}, (error) => {
+			exec(webpackPath + (isRelease ? ' --release' : '') , {cwd: ctx.opts.projectRoot}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
@@ -101,7 +101,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				wpSpawn = spawn(webpackPath, ['watch'], {shell: true, cwd: ctx.opts.projectRoot, stdio:[process.stdin, 'pipe', 'pipe']})
+				wpSpawn = spawn(webpackPath, ['--watch'], {shell: true, cwd: ctx.opts.projectRoot, stdio:[process.stdin, 'pipe', 'pipe']})
 			
 			wpSpawn.on('error', (err) => {
 				console.log('Failed to start webpack watcher!')
@@ -148,6 +148,16 @@ module.exports = function (ctx) {
 				typeof ctx.opts.options[name] != "undefined" &&
 				ctx.opts.options[name] === true
 			)
+		},
+		
+		checkArgv(name) {
+			return (
+				typeof ctx.opts != "undefined" &&
+				typeof ctx.opts.options != "undefined" &&
+				typeof ctx.opts.options.argv != "undefined" &&
+				Array.isArray(ctx.opts.options.argv) &&
+				typeof ctx.opts.options.argv[name] != "undefined"
+			)
 		}
 	}
 	
@@ -163,7 +173,7 @@ module.exports = function (ctx) {
 				isRun = ctx.cmdLine.indexOf('cordova run') > -1,
 				isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
 				isServe = ctx.cmdLine.indexOf('cordova serve') > -1,
-				isLiveReload = sys.checkOption('live-reload'),
+				isLiveReload = sys.checkArgv('--live-reload'),
 				isNoBuild = sys.checkOption('no-build'),
 				isRelease = sys.checkOption('release')
 		
