@@ -56,7 +56,7 @@ let config = {
 			}
 		}),
 		new CleanPlugin("www", {
-			root: path.join(__dirname, "../../")
+			root: path.join(__dirname, ".")
 		}),
 		new webpack.optimize.OccurrenceOrderPlugin(),
 		new HtmlWebpackPlugin({
