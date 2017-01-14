@@ -51,7 +51,7 @@ let config = {
 	plugins: [
 		new webpack.DefinePlugin({
 			'process.env': {
-				'NODE_ENV': JSON.stringify(TARGET == "release" ? 'production' : 'development')
+				'NODE_ENV': JSON.stringify((process.env && typeof process.env != "undefined" && process.env.release) ? 'production' : 'development')
 			}
 		}),
 		new CleanPlugin("www", {
@@ -78,8 +78,8 @@ let config = {
 }
 
 
-if( env ) {
-	if (typeof env.watch != "undefined" && env.watch) {
+if( process.env ) {
+	if (typeof process.env.watch != "undefined" && process.env.watch) {
 		config.devtool = "eval-source-map"
 		config.watch = true
 		config.watchOptions = {
@@ -87,7 +87,7 @@ if( env ) {
 			poll: 500,
 			ignored: /(node_modules|www|platforms|plugins|hooks|webpack)/ //watch only src folder
 		}
-	} else if (typeof env.release != "undefined" && env.release) {
+	} else if (typeof process.env.release != "undefined" && process.env.release) {
 		config.plugins.push(new UglifyJsPlugin({
 				cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
 				debug: true,
