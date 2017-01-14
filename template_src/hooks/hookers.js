@@ -96,8 +96,6 @@ module.exports = function (ctx) {
 		},
 		
 		startWebpackWatch() {
-			console.log('Starting webpack watch...')
-			
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
@@ -156,45 +154,53 @@ module.exports = function (ctx) {
 				typeof ctx.opts.options != "undefined" &&
 				typeof ctx.opts.options.argv != "undefined" &&
 				Array.isArray(ctx.opts.options.argv) &&
-				typeof ctx.opts.options.argv[name] != "undefined"
+				ctx.opts.options.argv.indexOf(name) > -1
 			)
 		}
 	}
 	
 	let deferral = new Q.defer();
 	
-	console.log("Before deploy hook started...")
-	
-	sys.checkNodeModules()
-	.then(() => sys.checkBrowserSync())
-	.then(() => {
+	if( ctx.opts.platforms.length == 0 ) {
+		console.log("Update happened. Skipping...")
+		deferral.resolve()
+	}
+	else {
+		console.log("Before deploy hook started...")
 		
-		let isBuild = ctx.cmdLine.indexOf('cordova build') > -1,
+		sys.checkNodeModules()
+		.then(() => sys.checkBrowserSync())
+		.then(() => {
+			
+			fs.writeFileSync(path.resolve(__dirname, "../ctxx.json"), JSON.stringify(ctx))
+			
+			let isBuild = ctx.cmdLine.indexOf('cordova build') > -1,
 				isRun = ctx.cmdLine.indexOf('cordova run') > -1,
 				isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
 				isServe = ctx.cmdLine.indexOf('cordova serve') > -1,
 				isLiveReload = sys.checkArgv('--live-reload'),
 				isNoBuild = sys.checkOption('no-build'),
 				isRelease = sys.checkOption('release')
-		
-		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReload && !isNoBuild) )
-			return sys.startWebpackBuild(isRelease)
-		else if( (isRun || isEmulate || isServe) && isLiveReload )
-			return sys.startWebpackWatch()
-		else
-			return sys.emptyDefer()
-	})
-	.then(() => {
-		console.log("Cordova hook completed. Resuming to run your cordova command...")
-		deferral.resolve()
-	})
-	.catch( (err) => {
-		console.log("Error happened on main chain:")
-		console.log(err)
-		
-		deferral.reject(err)
-	})
-	.done()
+			
+			if (isBuild || ((isRun || isEmulate || isServe) && !isLiveReload && !isNoBuild))
+				return sys.startWebpackBuild(isRelease)
+			else if ((isRun || isEmulate || isServe) && isLiveReload)
+				return sys.startWebpackWatch()
+			else
+				return sys.emptyDefer()
+		})
+		.then(() => {
+			console.log("Cordova hook completed. Resuming to run your cordova command...")
+			deferral.resolve()
+		})
+		.catch((err) => {
+			console.log("Error happened on main chain:")
+			console.log(err)
+			
+			deferral.reject(err)
+		})
+		.done()
+	}
 	
 	return deferral.promise
 }
