@@ -99,4 +99,4 @@ _(Note: If you want to add cordova.js to the page, you can add too.)_
 * **--nobuild**
 	* webpack will not run.
 
-You can check [hookers.js](hooks/hookers.js) for more information.
+You can check [hookers.js](template_src/hooks/hookers.js) for more information.
