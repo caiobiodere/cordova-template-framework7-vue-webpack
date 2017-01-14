@@ -172,8 +172,6 @@ module.exports = function (ctx) {
 		isNoBuild = sys.checkOption('no-build'),
 		isRelease = sys.checkOption('release')
 	
-	fs.writeFileSync(path.resolve(__dirname, "../ctxx.json"), JSON.stringify(ctx))
-	
 	if (ctx.opts.platforms.length == 0 && !isPrepare) {
 		console.log("Update happened. Skipping...")
 		deferral.resolve()
