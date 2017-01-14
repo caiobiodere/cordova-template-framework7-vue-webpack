@@ -11,7 +11,6 @@ module.exports = function (ctx) {
 		browserSyncCordovaPluginBasePath = path.resolve(pRoot, "plugins/cordova-plugin-browsersync/"),
 		nodeModulesPath = path.resolve(pRoot, "node_modules/"),
 		wwwFolder = path.resolve(pRoot, "www/"),
-		wwwIndexHtml = path.resolve(wwwFolder, "index.html"),
 		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
 		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json")
 	
@@ -21,31 +20,6 @@ module.exports = function (ctx) {
 			if (fs.existsSync(manifestFileSrcPath)) {
 				console.log("Manifest.json found in src folder. Copying...")
 				fs.writeFileSync(manifestFileCopyPath, fs.readFileSync(manifestFileSrcPath))
-			}
-		},
-		
-		checkCordovaJsInIndexHtml() {
-			if (fs.existsSync(wwwIndexHtml)) {
-				console.log("Checking is cordova.js exists in index.html...")
-				
-				let $ = cheerio.load(fs.readFileSync(wwwIndexHtml)),
-					cordovaJsFound = false
-				
-				$("script").each((index, element) => {
-					if ($(element).attr("src") == "cordova.js")
-						cordovaJsFound = true
-				})
-				
-				if (!cordovaJsFound) {
-					console.log("Cordova.js script not found in index.html. Adding...")
-					$("body").prepend('<script src="cordova.js"></script>')
-					fs.writeFileSync(wwwIndexHtml, $.html())
-				} else {
-					console.log("Cordova.js found in the index.html. Skipping...")
-				}
-				
-			} else {
-				console.log("FATAL ERROR: index.html file not found in www folder. Please check webpack configurations.")
 			}
 		},
 		
@@ -101,19 +75,18 @@ module.exports = function (ctx) {
 			return defer.promise
 		},
 		
-		startWebpackBuild() {
+		startWebpackBuild(isRelease) {
 			let defer = new Q.defer()
 			
 			console.log('Starting webpack build...')
 			
-			exec('webpack', {cwd: ctx.opts.projectRoot}, (error) => {
+			exec('webpack' + (isRelease ? ' release' : '') , {cwd: ctx.opts.projectRoot}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
 				}
 				
 				sys.checkManifestFile()
-				sys.checkCordovaJsInIndexHtml()
 				
 				console.log('Webpack build completed to www folder successfully!')
 				defer.resolve()
@@ -149,7 +122,6 @@ module.exports = function (ctx) {
 						
 						setTimeout(() => {
 							sys.checkManifestFile()
-							sys.checkCordovaJsInIndexHtml()
 							console.log('Webpack is watching your src folder...')
 						}, 500)
 						
@@ -175,18 +147,19 @@ module.exports = function (ctx) {
 	console.log("Before deploy hook started...")
 	
 	sys.checkNodeModules()
-	.then(e => sys.checkBrowserSync())
-	.then((e) => {
-		
+	.then(() => sys.checkBrowserSync())
+	.then(() => {
 		let isBuild = ctx.opts.cmdLine.indexOf('cordova build') > -1,
 				isRun = ctx.opts.cmdLine.indexOf('cordova run') > -1,
 				isEmulate = ctx.opts.cmdLine.indexOf('cordova emulate') > -1,
+				isServe = ctx.opts.cmdLine.indexOf('cordova serve') > -1,
 				isLiveReloadEnabled = ( typeof ctx.opts.options["live-reload"] != "undefined" && ctx.opts.options["live-reload"] === true ),
-				isNoBuild = ( typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true )
+				isNoBuild = ( typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true ),
+				isRelease = ( typeof ctx.opts.options["release"] != "undefined" && ctx.opts.options["release"] === true )
 		
-		if( isBuild || ((isRun || isEmulate) && !isLiveReloadEnabled && !isNoBuild) )
-			return sys.startWebpackBuild()
-		else if( (isRun || isEmulate) && isLiveReloadEnabled && !isNoBuild )
+		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReloadEnabled && !isNoBuild) )
+			return sys.startWebpackBuild(isRelease)
+		else if( (isRun || isEmulate || isServe) && isLiveReloadEnabled )
 			return sys.startWebpackWatch()
 		else
 			return sys.emptyDefer()
@@ -201,6 +174,7 @@ module.exports = function (ctx) {
 		
 		deferral.reject(err)
 	})
+	.done()
 	
 	return deferral.promise
 }
