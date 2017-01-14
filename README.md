@@ -88,7 +88,7 @@ _(Note: If you want to add cordova.js to the page, you can add too.)_
 ---
 
 ```bash
-  cordova (emulate|run|build|serve|prepare) (android|ios|browser|etc...) [...args] [-- --live-reload]
+  cordova (emulate|run|build|prepare) (android|ios|browser|etc...) [...args] [-- --live-reload]
 ```
 
 #### args:
