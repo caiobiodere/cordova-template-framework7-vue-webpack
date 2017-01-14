@@ -1,5 +1,4 @@
 const path = require('path'),
-	confPath = path.resolve(__dirname, "webpack/configs/"),
 	TARGET = process.env.npm_lifecycle_event,
 	
 	webpack = require('webpack'),
