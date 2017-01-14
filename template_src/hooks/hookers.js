@@ -80,7 +80,7 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec('webpack' + (isRelease ? ' release' : '') , {cwd: ctx.opts.projectRoot}, (error) => {
+			exec(webpackPath + (isRelease ? ' release' : '') , {cwd: ctx.opts.projectRoot}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
