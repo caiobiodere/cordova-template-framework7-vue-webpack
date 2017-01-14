@@ -1,6 +1,5 @@
 module.exports = function (ctx) {
 	const Q = ctx.requireCordovaModule('q'),
-		cheerio = ctx.requireCordovaModule('cheerio'),
 		path = ctx.requireCordovaModule('path'),
 		fs = ctx.requireCordovaModule('fs'),
 		cp = ctx.requireCordovaModule('child_process'),
