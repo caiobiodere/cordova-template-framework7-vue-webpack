@@ -4,7 +4,7 @@ const path = require('path'),
 	
 	webpack = require('webpack'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
-	CordovaHtmlOutputPlugin = require('webpack/plugins/CordovaHtmlOutputPlugin'),
+	CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js'),
 	UglifyJsPlugin = require('webpack-uglify-js-plugin'),
 	CleanPlugin = require('clean-webpack-plugin'),
 	ExtractTextPlugin = require("extract-text-webpack-plugin")
