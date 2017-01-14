@@ -80,7 +80,7 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec(webpackPath + (isRelease ? ' --release' : ''), {cwd: ctx.opts.projectRoot}, (error) => {
+			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: ctx.opts.projectRoot}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
@@ -99,7 +99,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				wpSpawn = spawn(webpackPath, ['--watch'], {
+				wpSpawn = spawn(webpackPath, ['--env.watch'], {
 					shell: true,
 					cwd: ctx.opts.projectRoot,
 					stdio: [process.stdin, 'pipe', 'pipe']

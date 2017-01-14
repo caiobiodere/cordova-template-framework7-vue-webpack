@@ -1,5 +1,4 @@
 const path = require('path'),
-	TARGET = process.env.npm_lifecycle_event,
 	
 	webpack = require('webpack'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
@@ -78,28 +77,31 @@ let config = {
 	]
 }
 
-if (TARGET === "--watch") {
-	config.devtool = "eval-source-map"
-	config.watch = true
-	config.watchOptions = {
-		aggregateTimeout: 300,
-		poll: 500,
-		ignored: /(node_modules|www|platforms|plugins|hooks|webpack)/ //watch only src folder
-	}
-} else if (TARGET == "--release") {
-	config.plugins.push(new UglifyJsPlugin({
-			cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
-			debug: true,
-			minimize: true,
-			sourceMap: false,
-			output: {
-				comments: false
-			},
-			compressor: {
-				warnings: false
-			}
+
+if( env ) {
+	if (typeof env.watch != "undefined" && env.watch) {
+		config.devtool = "eval-source-map"
+		config.watch = true
+		config.watchOptions = {
+			aggregateTimeout: 300,
+			poll: 500,
+			ignored: /(node_modules|www|platforms|plugins|hooks|webpack)/ //watch only src folder
 		}
-	))
+	} else if (typeof env.release != "undefined" && env.release) {
+		config.plugins.push(new UglifyJsPlugin({
+				cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
+				debug: true,
+				minimize: true,
+				sourceMap: false,
+				output: {
+					comments: false
+				},
+				compressor: {
+					warnings: false
+				}
+			}
+		))
+	}
 }
 
 module.exports = config
