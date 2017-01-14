@@ -11,7 +11,8 @@ module.exports = function (ctx) {
 		nodeModulesPath = path.resolve(pRoot, "node_modules/"),
 		wwwFolder = path.resolve(pRoot, "www/"),
 		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
-		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json")
+		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json"),
+		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack")
 	
 	const sys = {
 		
@@ -100,7 +101,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				wpSpawn = spawn('webpack', ['watch'], {cwd: ctx.opts.projectRoot, stdio:[process.stdin, 'pipe', 'pipe']})
+				wpSpawn = spawn(webpackPath, ['watch'], {shell: true, cwd: ctx.opts.projectRoot, stdio:[process.stdin, 'pipe', 'pipe']})
 			
 			wpSpawn.on('error', (err) => {
 				console.log('Failed to start webpack watcher!')
@@ -138,6 +139,15 @@ module.exports = function (ctx) {
 			defer.resolve()
 			
 			return defer.promise
+		},
+		
+		checkOption(name) {
+			return (
+				typeof ctx.opts != "undefined" &&
+				typeof ctx.opts.options != "undefined" &&
+				typeof ctx.opts.options[name] != "undefined" &&
+				ctx.opts.options[name] === true
+			)
 		}
 	}
 	
@@ -148,13 +158,14 @@ module.exports = function (ctx) {
 	sys.checkNodeModules()
 	.then(() => sys.checkBrowserSync())
 	.then(() => {
+		
 		let isBuild = ctx.cmdLine.indexOf('cordova build') > -1,
 				isRun = ctx.cmdLine.indexOf('cordova run') > -1,
 				isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
 				isServe = ctx.cmdLine.indexOf('cordova serve') > -1,
-				isLiveReload = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["live-reload"] != "undefined" && ctx.opts.options["live-reload"] === true ),
-				isNoBuild = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["no-build"] != "undefined" && ctx.opts.options["no-build"] === true ),
-				isRelease = ( typeof ctx.opts != "undefined" && typeof ctx.opts.options["release"] != "undefined" && ctx.opts.options["release"] === true )
+				isLiveReload = sys.checkOption('live-reload'),
+				isNoBuild = sys.checkOption('no-build'),
+				isRelease = sys.checkOption('release')
 		
 		if( isBuild || ((isRun || isEmulate || isServe) && !isLiveReload && !isNoBuild) )
 			return sys.startWebpackBuild(isRelease)

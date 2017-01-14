@@ -69,7 +69,6 @@ local.properties
 # DW Dreamweaver added files
 _notes
 _compareTemp
-configs/
 dwsync.xml
 dw_php_codehinting.config
 *.mno
@@ -315,3 +314,4 @@ captures/
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 
+!/template_src/webpack/configs/

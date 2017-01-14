@@ -1,7 +1,8 @@
 const path = require('path'),
 	merge = require('webpack-merge'),
 	ExtractTextPlugin = require("extract-text-webpack-plugin"),
-	TARGET = process.env.npm_lifecycle_event
+	TARGET = process.env.npm_lifecycle_event,
+	confPath = path.resolve(__dirname, "webpack/configs/")
 
 const baseConfig = {
 	entry: path.join( __dirname, 'src/main.js' ),
@@ -44,7 +45,7 @@ const baseConfig = {
 }
 
 if(TARGET === "watch")
-	module.exports = merge.smart( baseConfig, require('./webpack/configs/watch.config.js') )
+	module.exports = merge.smart( baseConfig, require(path.join(confPath, 'watch.config.js')) )
 else
-	module.exports = merge.smart( baseConfig, require('./webpack/configs/build.config.js') )
+	module.exports = merge.smart( baseConfig, require(path.join(confPath, 'build.config.js')) )
 
