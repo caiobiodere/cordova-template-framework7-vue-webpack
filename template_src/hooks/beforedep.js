@@ -65,8 +65,11 @@ module.exports = function (ctx) {
 				typeof ctx.opts != "undefined" &&
 				typeof ctx.opts.options != "undefined" &&
 				typeof ctx.opts.options.argv != "undefined" &&
-				Array.isArray(ctx.opts.options.argv) &&
-				ctx.opts.options.argv.indexOf(name) > -1
+				(
+					Array.isArray(ctx.opts.options.argv) &&
+					ctx.opts.options.argv.indexOf(name) > -1 ||
+					ctx.opts.options.argv[name] === true
+				)
 			)
 		},
 		
