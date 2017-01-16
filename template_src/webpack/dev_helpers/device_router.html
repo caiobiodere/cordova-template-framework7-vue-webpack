@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>Device Router</title>
+	
+	<style>
+		html {
+			background: #DDD;
+			font-size: 14px;
+			color: #222;
+			font-family: Arial, sans-serif;
+		}
+		
+		html, body {
+			padding: 0;
+			margin: 0;
+		}
+		
+		html * {
+			box-sizing: border-box;
+		}
+		
+		#unavailable {
+			display: block;
+		}
+		
+		#unavailable p {
+			display: none;
+			font-size: 15px;
+			background: #444;
+			color: #FFF;
+			padding: 20px;
+			margin: 10px;
+			border-radius: 10px;
+			line-height: 24px;
+		}
+		
+		#status_text {
+			display: block;
+			
+			background: #2196F3;
+			color: #FFF;
+			padding: 20px;
+			margin: 10px;
+			
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			border-radius: 10px;
+		}
+		
+		input {
+			display: block;
+			background: #FFF;
+			border: 1px solid #CCCCCC;
+			font-size: 14px;
+			color: #222;
+			width: 100%;
+			height: 46px;
+			padding: 10px;
+		}
+		
+		button {
+			display: block;
+			margin-top: 10px;
+			width: 100%;
+			height: 34px;
+		}
+		
+		.input_wrap {
+			padding: 0 10px;
+		}
+	</style>
+	
+</head>
+<body>
+	
+	<div id="unavailable">
+		<p>
+			It seems we can't connect to<br>127.0.0.1:8080<br><script>document.write(localServerIp)</script>:8080<br><br>
+			You can test yourself with next inputs:
+		</p>
+		
+		<div id="status_text">
+			Waiting for device ready...
+		</div>
+		
+		<div class="input_wrap">
+			<input type="text" placeholder="Server Ip:Port (like 192.168.0.2:8080)" disabled>
+		</div>
+		
+		<div class="input_wrap">
+			<button type="button" onclick="tryConnect()" disabled>Connect</button>
+		</div>
+	</div>
+
+	<script>
+		let deviceReadyChecker = setTimeout(startRedirectChecks, 5000)
+		
+		document.addEventListener("deviceready", function() {
+			clearTimeout(deviceReadyChecker)
+			
+			if( typeof navigator.splashscreen != "undefined" && typeof navigator.splashscreen.hide == "function" )
+				navigator.splashscreen.hide()
+			
+			startRedirectChecks()
+		})
+		
+		function startRedirectChecks() {
+			testConnection('127.0.0.1:8080', goUrl, function() {
+				testConnection(`${localServerIp}:8080`, goUrl, ajaxErr)
+			})
+		}
+		
+		function tryConnect() {
+			let ipTest = /^([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{1,6})?$/,
+					ipPort = document.querySelector("input").value
+			
+			if( ipTest.test(ipPort) )
+				testConnection( ipPort, goUrl, ajaxErr)
+		}
+		
+		function testConnection( ipPort, callback, errCallback ) {
+			let xhr = new XMLHttpRequest()
+			
+			document.querySelector("button").disabled = true
+			document.querySelector("input").disabled = true
+			document.querySelector("#status_text").innerText = `Trying to connect http://${ipPort}`
+			
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					document.querySelector("#status_text").innerText = `Connection to 'http://${ipPort}/' success! Redirecting...`
+					
+					if( typeof callback == "function" )
+						callback(ipPort)
+				}
+				else if (xhr.readyState === 4 && xhr.status != 200) {
+					document.querySelector("button").disabled = false
+					document.querySelector("input").disabled = false
+					document.querySelector("#status_text").innerText = `Connection to 'http://${ipPort}/' failed!`
+					
+					if(typeof errCallback == "function")
+						errCallback(ipPort)
+				}
+			}
+			
+			xhr.open('GET', `http://${ipPort}/`)
+			xhr.send(null)
+		}
+		
+		function goUrl(ipPort) {
+			setTimeout( () => { window.location.href = `http://${ipPort}/` }, 1500)
+		}
+		
+		function ajaxErr(ipPort) {
+			document.querySelector("#unavailable p").style.display = "block"
+			console.log(`Can't connect to http://${ipPort}/`)
+		}
+		
+	</script>
+</body>
+</html>

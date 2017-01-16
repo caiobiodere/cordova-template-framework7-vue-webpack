@@ -3,18 +3,47 @@ module.exports = function (ctx) {
 		path = ctx.requireCordovaModule('path'),
 		fs = ctx.requireCordovaModule('fs'),
 		cp = ctx.requireCordovaModule('child_process'),
+		os = ctx.requireCordovaModule('os'),
+		ifaces = os.networkInterfaces(),
 		spawn = cp.spawn,
 		exec = cp.exec,
 		pRoot = ctx.opts.projectRoot,
 		
-		browserSyncCordovaPluginBasePath = path.resolve(pRoot, "plugins/cordova-plugin-browsersync/"),
 		nodeModulesPath = path.resolve(pRoot, "node_modules/"),
 		wwwFolder = path.resolve(pRoot, "www/"),
 		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
 		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json"),
-		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack")
+		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack"),
+		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server")
+	
+	function getRouterIpAddr() {
+		for (key in ifaces) {
+			for (ipInfoKey in  ifaces[key]) {
+				let ipInfo = ifaces[key][ipInfoKey]
+				
+				if (ipInfo.family == 'IPv4' && ipInfo.address.indexOf("192.168.") === 0 && !ipInfo.internal)
+					return ipInfo.address
+			}
+		}
+		
+		return "127.0.0.1"
+	}
 	
 	const sys = {
+		
+		deleteFolderRecursive(path) {
+			if( fs.existsSync(path) ) {
+				fs.readdirSync(path).forEach((file) => {
+					let curPath = path + "/" + file
+					if(fs.lstatSync(curPath).isDirectory())
+						sys.deleteFolderRecursive(curPath);
+					else
+						fs.unlinkSync(curPath)
+				})
+				
+				fs.rmdirSync(path)
+			}
+		},
 		
 		checkManifestFile() {
 			if (fs.existsSync(manifestFileSrcPath)) {
@@ -31,7 +60,7 @@ module.exports = function (ctx) {
 			if (!fs.existsSync(nodeModulesPath)) {
 				console.log('Node modules not found. Installing...')
 				
-				exec('npm i', {cwd: ctx.opts.projectRoot}, (error) => {
+				exec('npm i', {cwd: pRoot}, (error) => {
 					if (error) {
 						console.error(`Error happened when npm install: ${error}`);
 						defer.reject(new Error(`Error happened when npm install: ${error}`))
@@ -49,28 +78,63 @@ module.exports = function (ctx) {
 			return defer.promise
 		},
 		
-		checkBrowserSync() {
-			let defer = new Q.defer()
+		makeNonDevServerChanges() {
+			let defer = new Q.defer(),
+				cheerio = require("cheerio"),
+				configFile = path.resolve(__dirname, "../config.xml"),
+				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
-			console.log('Checking is browsersync plugin installed...')
-			
-			if (!fs.existsSync(browserSyncCordovaPluginBasePath)) {
-				console.log('Browsersync plugin not found. Installing...')
+			if( conf("allow-navigation").length > 0 ) {
+				let target = conf("allow-navigation")
 				
-				exec('cordova plugin add cordova-plugin-browsersync', {cwd: ctx.opts.projectRoot}, (error) => {
-					if (error) {
-						console.error(`Error happened when browsersync install: ${error}`);
-						defer.reject(new Error(`Error happened when browsersync install: ${error}`))
-					}
-					
-					console.log('Browsersync installed successfully!')
-					defer.resolve()
-				})
+				if( target.attr("data-href") != "" )
+					target.attr("href", target.attr("data-href")).removeAttr("data-href")
 			}
+			
+			fs.writeFileSync(configFile, conf.html(), 'utf-8')
+			
+			defer.resolve()
+			
+			return defer.promise
+		},
+		
+		makeDevServerChanges() {
+			let defer = new Q.defer(),
+				configFile = path.resolve(__dirname, "../config.xml"),
+				srcFile = path.resolve(__dirname, "../webpack/dev_helpers/device_router.html"),
+				targetFile = path.resolve(wwwFolder, "index.html"),
+				wwwDir = path.resolve(__dirname, "../www/"),
+				platformDir = path.resolve(wwwDir, "platform_cordova_files/"),
+				wwwConfig = path.resolve(wwwDir, "config.xml"),
+				
+				defaultCsp = "default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8080 http://LOCIP:8080; object-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; frame-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; font-src *; connect-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080",
+				
+				cheerio = require("cheerio"),
+				$ = cheerio.load(fs.readFileSync(srcFile, 'utf-8')),
+				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
+			
+			$('head').prepend(`<meta http-equiv="content-security-policy" content="${defaultCsp.replace(/LOCIP/g, getRouterIpAddr())}">`)
+			$('body').prepend(`<script>const localServerIp = "${getRouterIpAddr()}"</script>`).append(`<script src="cordova.js"></script>`)
+			fs.writeFileSync(targetFile, $.html())
+			
+			if( conf("allow-navigation").length == 0 )
+				conf("widget").append('<allow-navigation href="*" />')
 			else {
-				console.log('Browsersync already installed.')
-				defer.resolve()
+				let target = conf("allow-navigation")
+				
+				if( target.attr("href") != "*" )
+					target.attr("data-href", target.attr("href")).attr("href", "*")
 			}
+			
+			fs.writeFileSync(configFile, conf.html(), 'utf-8')
+			
+			if( fs.existsSync(platformDir) )
+				sys.deleteFolderRecursive(platformDir)
+			
+			if( fs.existsSync(wwwConfig) )
+				fs.unlinkSync(wwwConfig)
+			
+			defer.resolve()
 			
 			return defer.promise
 		},
@@ -80,7 +144,7 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: ctx.opts.projectRoot}, (error) => {
+			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: pRoot}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
@@ -95,37 +159,32 @@ module.exports = function (ctx) {
 			return defer.promise
 		},
 		
-		startWebpackWatch() {
+		startWebpackDevServer() {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				wpSpawn = spawn(webpackPath, ['--env.watch'], {
+				devServerSpawn = spawn( webpackDevServerPath, ['--env.devserver'], {
 					shell: true,
-					cwd: ctx.opts.projectRoot,
+					cwd: pRoot,
 					stdio: [process.stdin, 'pipe', 'pipe']
 				})
 			
-			wpSpawn.on('error', (err) => {
-				console.log('Failed to start webpack watcher!')
+			devServerSpawn.on('error', (err) => {
+				console.log('Failed to start webpack dev server!')
 				console.log(err)
 				
 				defer.reject(err)
 			})
 			
-			wpSpawn.stdout.on('data', (data) => {
+			devServerSpawn.stdout.on('data', (data) => {
 				process.stdout.write(data)
 				
 				if (!isResultFound) {
 					outText += data
 					
-					if (outText.indexOf('Child html-webpack-plugin for') > -1) {
+					if (outText.indexOf('bundle is now VALID.') > -1) {
 						isResultFound = true
 						outText = ""
-						
-						setTimeout(() => {
-							sys.checkManifestFile()
-							console.log('Webpack is watching your src folder...')
-						}, 500)
 						
 						defer.resolve()
 					}
@@ -160,15 +219,23 @@ module.exports = function (ctx) {
 				Array.isArray(ctx.opts.options.argv) &&
 				ctx.opts.options.argv.indexOf(name) > -1
 			)
+		},
+		
+		isFoundInCmdline( cmdCommand ) {
+			return (
+				ctx.cmdLine.indexOf(`cordova ${cmdCommand}`) > -1 ||
+				ctx.cmdLine.indexOf(`phonegap ${cmdCommand}`) > -1
+			)
 		}
 	}
 	
 	let deferral = new Q.defer(),
-		isBuild = ctx.cmdLine.indexOf('cordova build') > -1,
-		isRun = ctx.cmdLine.indexOf('cordova run') > -1,
-		isEmulate = ctx.cmdLine.indexOf('cordova emulate') > -1,
-		isPrepare = ctx.cmdLine.indexOf('cordova prepare') > -1,
-		isLiveReload = sys.checkArgv('--live-reload'),
+		isBuild = sys.isFoundInCmdline('build'),
+		isRun = sys.isFoundInCmdline('run'),
+		isEmulate = sys.isFoundInCmdline('emulate'),
+		isPrepare = sys.isFoundInCmdline('prepare'),
+		isServe = sys.isFoundInCmdline('serve'),
+		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr'),
 		isNoBuild = sys.checkOption('no-build'),
 		isRelease = sys.checkOption('release')
 	
@@ -180,12 +247,12 @@ module.exports = function (ctx) {
 		console.log("Before deploy hook started...")
 		
 		sys.checkNodeModules()
-		.then(() => sys.checkBrowserSync())
 		.then(() => {
-			if (isBuild || ((isRun || isEmulate || isPrepare) && !isLiveReload && !isNoBuild))
-				return sys.startWebpackBuild(isRelease)
-			else if ((isRun || isEmulate) && isLiveReload)
-				return sys.startWebpackWatch()
+			if (isBuild || ((isRun || isEmulate || isPrepare) && !isLiveReload && !isNoBuild)) {
+				return sys.makeNonDevServerChanges().then(() => sys.startWebpackBuild(isRelease))
+			} else if (isServe || (isRun || isEmulate) && isLiveReload) {
+				return sys.makeDevServerChanges().then( () => sys.startWebpackDevServer() )
+			}
 			else
 				return sys.emptyDefer()
 		})

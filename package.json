@@ -12,8 +12,10 @@
   },
   "homepage": "https://github.com/centrual/cordova-template-framework7-vue-webpack",
   "keywords": [
+    "ecosystem:phonegap",
     "ecosystem:cordova",
-    "cordova:template"
+    "cordova:template",
+    "phonegap:template"
   ],
   "author": "Oguz Ozcan",
   "license": "Apache-2.0"
