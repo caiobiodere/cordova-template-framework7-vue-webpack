@@ -63,7 +63,7 @@ module.exports = function (ctx) {
 			
 			console.log('Checking is node modules installed...')
 			
-			if (!fs.existsSync(nodeModulesPath)) {
+			if (!fs.existsSync(nodeModulesPath) || !fs.existsSync(path.resolve(nodeModulesPath, "cheerio/"))) {
 				console.log('Node modules not found. Installing...')
 				
 				exec('npm i', {cwd: pRoot}, (error) => {
