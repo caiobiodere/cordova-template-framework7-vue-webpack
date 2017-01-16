@@ -32,10 +32,10 @@ module.exports = function (ctx) {
 	const sys = {
 		
 		deleteFolderRecursive(path) {
-			if (fs.existsSync(path)) {
+			if( fs.existsSync(path) ) {
 				fs.readdirSync(path).forEach((file) => {
 					let curPath = path + "/" + file
-					if (fs.lstatSync(curPath).isDirectory())
+					if(fs.lstatSync(curPath).isDirectory())
 						sys.deleteFolderRecursive(curPath);
 					else
 						fs.unlinkSync(curPath)
@@ -43,6 +43,18 @@ module.exports = function (ctx) {
 				
 				fs.rmdirSync(path)
 			}
+		},
+		
+		cleanWww() {
+			let wwwDir = path.resolve(__dirname, "../www/"),
+				platformDir = path.resolve(wwwDir, "platform_cordova_files/"),
+				wwwConfig = path.resolve(wwwDir, "config.xml")
+			
+			if( fs.existsSync(platformDir) )
+				sys.deleteFolderRecursive(platformDir)
+			
+			if( fs.existsSync(wwwConfig) )
+				fs.unlinkSync(wwwConfig)
 		},
 		
 		checkManifestFile() {
@@ -84,16 +96,17 @@ module.exports = function (ctx) {
 				configFile = path.resolve(__dirname, "../config.xml"),
 				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
-			if (conf("allow-navigation").length > 0) {
+			if( conf("allow-navigation").length > 0 ) {
 				let target = conf("allow-navigation")
 				
-				if (target.attr("data-href") != "") {
+				if( target.attr("data-href") != "" ) {
 					target.attr("href", target.attr("data-href"))
 					target.removeAttr("data-href")
 				}
 			}
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
+			sys.cleanWww()
 			
 			defer.resolve()
 			
@@ -105,9 +118,6 @@ module.exports = function (ctx) {
 				configFile = path.resolve(__dirname, "../config.xml"),
 				srcFile = path.resolve(__dirname, "../webpack/dev_helpers/device_router.html"),
 				targetFile = path.resolve(wwwFolder, "index.html"),
-				wwwDir = path.resolve(__dirname, "../www/"),
-				platformDir = path.resolve(wwwDir, "platform_cordova_files/"),
-				wwwConfig = path.resolve(wwwDir, "config.xml"),
 				
 				defaultCsp = "default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8080 http://LOCIP:8080; object-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; frame-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; font-src *; connect-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080",
 				
@@ -119,22 +129,17 @@ module.exports = function (ctx) {
 			$('body').prepend(`<script>const localServerIp = "${getRouterIpAddr()}"</script>`).append(`<script src="cordova.js"></script>`)
 			fs.writeFileSync(targetFile, $.html())
 			
-			if (conf("allow-navigation").length == 0)
+			if( conf("allow-navigation").length == 0 )
 				conf("widget").append('<allow-navigation href="*" />')
 			else {
 				let target = conf("allow-navigation")
 				
-				if (target.attr("href") != "*")
+				if( target.attr("href") != "*" )
 					target.attr("data-href", target.attr("href")).attr("href", "*")
 			}
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
-			
-			if (fs.existsSync(platformDir))
-				sys.deleteFolderRecursive(platformDir)
-			
-			if (fs.existsSync(wwwConfig))
-				fs.unlinkSync(wwwConfig)
+			sys.cleanWww()
 			
 			defer.resolve()
 			
@@ -165,7 +170,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				devServerSpawn = spawn(webpackDevServerPath, ['--env.devserver'], {
+				devServerSpawn = spawn( webpackDevServerPath, ['--env.devserver'], {
 					shell: true,
 					cwd: pRoot,
 					stdio: [process.stdin, 'pipe', 'pipe']
@@ -223,7 +228,7 @@ module.exports = function (ctx) {
 			)
 		},
 		
-		isFoundInCmdline(cmdCommand) {
+		isFoundInCmdline( cmdCommand ) {
 			return (
 				ctx.cmdLine.indexOf(`cordova ${cmdCommand}`) > -1 ||
 				ctx.cmdLine.indexOf(`phonegap ${cmdCommand}`) > -1
@@ -253,7 +258,7 @@ module.exports = function (ctx) {
 			if (isBuild || ((isRun || isEmulate || isPrepare) && !isLiveReload && !isNoBuild)) {
 				return sys.makeNonDevServerChanges().then(() => sys.startWebpackBuild(isRelease))
 			} else if (isServe || (isRun || isEmulate) && isLiveReload) {
-				return sys.makeDevServerChanges().then(() => sys.startWebpackDevServer())
+				return sys.makeDevServerChanges().then( () => sys.startWebpackDevServer() )
 			}
 			else
 				return sys.emptyDefer()
