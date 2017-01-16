@@ -1,4 +1,5 @@
 ## 16.01.2017 - 1.0.1
+* Supports phonegap now!
 * Template now uses `webpack-dev-server` for live-reload. So cordova-plugin-browsersync dependency dropped.
 * `webpack-dev-server` dependency added.
 * You can use `cordova (run|emulate) (ios|android|browser) -- --lr` now. lr means `live-reload`.
