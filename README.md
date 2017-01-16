@@ -34,69 +34,57 @@ This template uses:
 * **Cordova:** _6.0.0_
 * **Node.js:** _6.5.0_ (Supports ES6)
 
-## Installation
-This template needs cordova. You can install cordova with:
-``` bash
-npm i cordova -g
-```
-
-For more info about cordova installation, please [check this page](https://cordova.apache.org/docs/en/latest/guide/cli/).
-
 ---
 
-Okay, you have cordova. Let's do a magic:
+## Features
+
+Hooks are smart. They can fix some problems for you. Fix list:
+* `npm install` Automatically checks node js dependencies.
+* `package.json` Renames `name` variable if it has a space characters and auto saves. (It needed for npm install)
+* `www` Automatically manages `www` folder. You don't need to think about www folder. Your target is always `src` folder.
+* `CordovaHtmlOutputPlugin` Automatically adds `cordova.js` to html. You don't need to add to your file manually. It's helpful for webpack.
+* `manifest.json` Some cordova plugins needs manifest.json in root folder. If you add manifest.json file to your `src` folder, our smart hooks automagically copy it to `www` folder!
+
+###### Live Reload Related
+* `config.xml` Live reload needs `<allow-navigation href="*"/>` in development mode. So our smart hooks manages this too. You don't need to think about it.
+* `live-reload` Manages live-reload dependencies automatically. Just write your code, and don't think about dependencies.
+* `device_router.html` Smart router in live-reload mode. It searches for best available ip for connect server. if it can't find, you can write ip:port manually.
+* `CordovaDeviceRouter.js` In live-reload mode, you can connect to server from multiple devices. This file inject right `cordova.js` file to page. So you can connect to webpack-dev-server from multiple devices at same time.
+
+## Installation
+This template need cordova or phonegap, for more information [cordova installation](https://cordova.apache.org/docs/en/latest/guide/cli/) or [phonegap installation](http://docs.phonegap.com/getting-started/1-install-phonegap/desktop/).
+
+Our Magic words:
 
 ``` bash
-cordova create <project_create_dir> com.example.projectname ProjectClassName --template cordova-template-framework7-vue-webpack
+cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
+phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
 ```
 
-boom! :boom: you have your brand new cordova project with framework7 - vue and webpack 2!
+boom! :boom: you have your brand new cordova / phonegap project with framework7 - vue 2 and webpack 2!
 
 ![such a wow!](https://cloud.githubusercontent.com/assets/296796/3511506/4042665c-06b0-11e4-953c-4f14c11f81ec.png "such a wow!")
 
-**Important:** `ProjectClassName` should be written without spaces. 
-
 ---
-
-You don't need to use `npm install` manually for install node.js dependencies.
-As well as you don't need to install `cordova-plugin-browsersync` manually too.
-
-When you use one of `cordova (emulate|run|build|prepare)` commands, hookers.js will install automagically these things, before run your cordova command.
-
-**Note! Important Cordova Plugin:** This template needs [cordova-plugin-browsersync](https://github.com/nparashuram/cordova-plugin-browsersync). It installs automagically when you use one of `cordova (emulate|run|build|prepare)` commands.
-
----
-
-Now you need to add platform you want. You can add platform with this command:
-
-```
-cordova platform add (browser|android|ios|etc...)
-```
-
-And :tada:, all set!
 
 ## Usage
-You can run all cordova commands.
-We have some cool hooks for faster development. If you don't know what is cordova hooks please check [this page](https://cordova.apache.org/docs/en/latest/guide/appdev/hooks/).
 
----
+You can use every cordova | phonegap commands.
+You just have one more command option: `-- --lr`. It starts live reload.
 
-You don't need to add `<script src="cordova.js"></script>` to your `index.html`. It will be added automagically...
-
-_(Note: If you want to add cordova.js to the page, you can add too.)_
-
----
-
-```bash
-  cordova (emulate|run|build|prepare) (android|ios|browser|etc...) [...args] [-- --live-reload]
+Example usage:
+```
+cordova run android -- --lr
+cordova run browser -- --live-reload
+phonegap run ios -- --lr
 ```
 
-#### args:
-* **-- --live-reload:**
-	* webpack starts to watch `src` folder.
-	* when you change any file in `src` folder, webpack will `recompile` files and `refreshes target` automagically!
-	
-* **--nobuild**
-	* webpack will not run.
+And :tada: that's all folks!
 
-You can check [hookers.js](template_src/hooks/hookers.js) for more information.
+You can check:
+* [hookers.js](template_src/hooks/hookers.js),
+* [beforedep.js](template_src/hooks/beforedep.js),
+* [CordovaDeviceRouter.js](template_src/webpack/dev_helpers/CordovaDeviceRouter.js),
+* [device_router.html](template_src/webpack/dev_helpers/device_router.html)
+
+for more information.
