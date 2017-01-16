@@ -14,7 +14,10 @@ module.exports = function (ctx) {
 		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
 		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json"),
 		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack"),
-		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server")
+		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server"),
+		packageJsonPath = path.resolve(__dirname, "../package.json"),
+		
+		package = require(packageJsonPath)
 	
 	function getRouterIpAddr() {
 		for (key in ifaces) {
@@ -29,7 +32,20 @@ module.exports = function (ctx) {
 		return "127.0.0.1"
 	}
 	
+	String.prototype.toDash = function(){
+		return this.replace(/([A-Z])/g, function($1){
+			return "-"+ $1.toLowerCase()
+		})
+	};
+	
 	const sys = {
+		
+		checkPackageName() {
+			if( /\s/g.test(package.name) ) {
+				package.name = package.name.toDash()
+				fs.writeFileSync(packageJsonPath, JSON.stringify(package), 'utf-8')
+			}
+		},
 		
 		deleteFolderRecursive(path, doNotDeleteSelf = false) {
 			if (fs.existsSync(path)) {
@@ -250,6 +266,9 @@ module.exports = function (ctx) {
 	}
 	else {
 		console.log("Before deploy hook started...")
+		
+		// if package name contains space characters, we'll convert it to kebab case. Required for npm install command to work.
+		sys.checkPackageName()
 		
 		sys.checkNodeModules()
 		.then(() => {
