@@ -1,6 +1,5 @@
 const path = require('path'),
-	os = require('os'),
-	ifaces = os.networkInterfaces(),
+	fs = require('fs'),
 	
 	webpack = require('webpack'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
@@ -8,22 +7,9 @@ const path = require('path'),
 	UglifyJsPlugin = require('webpack-uglify-js-plugin'),
 	CleanPlugin = require('clean-webpack-plugin'),
 	ExtractTextPlugin = require("extract-text-webpack-plugin"),
-	devServer = require('webpack-dev-server'),
 	
-	entryFile = path.join(__dirname, 'src/main.js')
-
-function getRouterIpAddr() {
-	for (key in ifaces) {
-		for (ipInfoKey in  ifaces[key]) {
-			let ipInfo = ifaces[key][ipInfoKey]
-			
-			if (ipInfo.family == 'IPv4' && ipInfo.address.indexOf("192.168.") === 0 && !ipInfo.internal)
-				return ipInfo.address
-		}
-	}
-	
-	return "127.0.0.1"
-}
+	entryFile = path.join(__dirname, 'src/main.js'),
+	devServerPort = 8080
 
 let config = function (env) {
 	let returner = {
@@ -44,9 +30,10 @@ let config = function (env) {
 		output: {
 			pathinfo: true,
 			devtoolLineToLine: true,
-			filename: '[chunkhash].[name].js',
-			sourceMapFilename: "[chunkhash].[name].js.map",
-			path: path.join(__dirname, 'www')
+			filename: '[hash].[name].js',
+			sourceMapFilename: "[hash].[name].js.map",
+			path: path.join(__dirname, 'www'),
+			publicPath: "/"
 		},
 		
 		module: {
@@ -70,7 +57,7 @@ let config = function (env) {
 		plugins: [
 			new webpack.DefinePlugin({
 				'process.env': {
-					'NODE_ENV': JSON.stringify((process.env && typeof process.env != "undefined" && process.env.release) ? 'production' : 'development')
+					'NODE_ENV': JSON.stringify((env && typeof env != "undefined" && env.release) ? 'production' : 'development')
 				}
 			}),
 			new webpack.optimize.OccurrenceOrderPlugin(),
@@ -88,28 +75,44 @@ let config = function (env) {
 					minifyCSS: true
 				}
 			}),
-			new CordovaHtmlOutputPlugin(),
 			new ExtractTextPlugin("styles.css")
 		]
 	}
 	
+	if (typeof env == "undefined" || typeof env.devserver == "undefined") {
+		returner.plugins.push(new CordovaHtmlOutputPlugin())
+	}
 	
 	if (env) {
 		if (typeof env.devserver != 'undefined' && env.devserver) {
 			returner.entry = [
-				'webpack/hot/dev-server',
-				`webpack-dev-server/client?http://${getRouterIpAddr()}:8080/`,
-				entryFile
+				entryFile,
+				path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")
 			]
 			returner.devtool = "eval-source-map"
 			returner.devServer = {
 				contentBase: path.join(__dirname, "www"),
 				compress: false,
-				hot: true,
+				hot: false,
 				inline: true,
-				port: 8080
+				port: devServerPort,
+				stats: {colors: true},
+				watchOptions: {
+					aggregateTimeout: 300,
+					poll: 1000
+				},
+				headers: {
+					"Access-Control-Allow-Origin": "*"
+				},
+				host: "0.0.0.0"
 			}
+			
 		} else if (typeof env.release != 'undefined' && env.release) {
+			returner.plugins.push(new CleanPlugin("www", {
+				root: path.join(__dirname, "."),
+				dry: false,
+				exclude: ["index.html"]
+			}))
 			returner.plugins.push(new UglifyJsPlugin({
 					cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
 					debug: true,
