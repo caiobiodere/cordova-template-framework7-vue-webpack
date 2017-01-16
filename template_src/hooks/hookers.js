@@ -32,17 +32,20 @@ module.exports = function (ctx) {
 		return "127.0.0.1"
 	}
 	
-	String.prototype.toDash = function(){
-		return this.replace(/([A-Z])/g, function($1){
-			return "-"+ $1.toLowerCase()
-		})
-	};
 	
 	const sys = {
 		
+		toKebabCase(txt) {
+			return txt.replace(/(\s)+/g, '-').replace(/[A-Z]/g, function (t) {
+				return t.toLowerCase()
+			})
+		},
+		
 		checkPackageName() {
-			if( /\s/g.test(package.name) ) {
-				package.name = package.name.toDash()
+			if (typeof package.name == "undefined" || package.name == "") {
+				package.name = "hello-world"
+			} else if (/\s/g.test(package.name)) {
+				package.name = sys.toKebabCase(package.name)
 				fs.writeFileSync(packageJsonPath, JSON.stringify(package), 'utf-8')
 			}
 		},
