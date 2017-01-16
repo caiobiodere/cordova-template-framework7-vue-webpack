@@ -73,9 +73,6 @@ let config = function (env) {
 					'NODE_ENV': JSON.stringify((process.env && typeof process.env != "undefined" && process.env.release) ? 'production' : 'development')
 				}
 			}),
-			new CleanPlugin("www", {
-				root: path.join(__dirname, ".")
-			}),
 			new webpack.optimize.OccurrenceOrderPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',
