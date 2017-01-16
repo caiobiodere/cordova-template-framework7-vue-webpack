@@ -240,7 +240,7 @@ module.exports = function (ctx) {
 		isEmulate = sys.isFoundInCmdline('emulate'),
 		isPrepare = sys.isFoundInCmdline('prepare'),
 		isServe = sys.isFoundInCmdline('serve'),
-		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr'),
+		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr') || sys.checkArgv('lr') || sys.checkArgv('live-reload'),
 		isNoBuild = sys.checkOption('no-build'),
 		isRelease = sys.checkOption('release')
 	

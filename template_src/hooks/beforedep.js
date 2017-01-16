@@ -4,7 +4,6 @@ module.exports = function (ctx) {
 		fs = ctx.requireCordovaModule('fs'),
 		pRoot = ctx.opts.projectRoot,
 		
-		nodeModulesPath = path.resolve(pRoot, "node_modules/"),
 		wwwFolder = path.resolve(pRoot, "www/"),
 		moveAllTo = path.resolve(wwwFolder, "platform_cordova_files/")
 	
@@ -82,14 +81,11 @@ module.exports = function (ctx) {
 	}
 	
 	let deferral = new Q.defer(),
-		isBuild = sys.isFoundInCmdline('build'),
 		isRun = sys.isFoundInCmdline('run'),
 		isEmulate = sys.isFoundInCmdline('emulate'),
 		isPrepare = sys.isFoundInCmdline('prepare'),
 		isServe = sys.isFoundInCmdline('serve'),
-		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr'),
-		isNoBuild = sys.checkOption('no-build'),
-		isRelease = sys.checkOption('release')
+		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr') || sys.checkArgv('lr') || sys.checkArgv('live-reload')
 	
 	if (ctx.opts.platforms.length == 0 && !isPrepare) {
 		console.log("Update happened. Skipping...")
@@ -102,8 +98,8 @@ module.exports = function (ctx) {
 			if (!fs.existsSync(moveAllTo))
 				fs.mkdirSync(moveAllTo)
 			
-			checkAndCopy(['android', 'ios', 'browser'])
-			copyMainXml()
+			sys.checkAndCopy(['android', 'ios', 'browser'])
+			sys.copyMainXml()
 			
 			console.log("All platform files copied to www/platform_cordova_files/ directory!")
 		} else
