@@ -119,6 +119,8 @@ module.exports = function (ctx) {
 				$ = cheerio.load(fs.readFileSync(srcFile, 'utf-8')),
 				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
+			sys.cleanWww()
+			
 			$('head').prepend(`<meta http-equiv="content-security-policy" content="${defaultCsp.replace(/LOCIP/g, getRouterIpAddr())}">`)
 			$('body').prepend(`<script>const localServerIp = "${getRouterIpAddr()}"</script>`).append(`<script src="cordova.js"></script>`)
 			fs.writeFileSync(targetFile, $.html())
@@ -133,7 +135,6 @@ module.exports = function (ctx) {
 			}
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
-			sys.cleanWww()
 			
 			defer.resolve()
 			
