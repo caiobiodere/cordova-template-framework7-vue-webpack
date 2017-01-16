@@ -32,8 +32,7 @@ let config = function (env) {
 			devtoolLineToLine: true,
 			filename: '[hash].[name].js',
 			sourceMapFilename: "[hash].[name].js.map",
-			path: path.join(__dirname, 'www'),
-			publicPath: "/"
+			path: path.join(__dirname, 'www')
 		},
 		
 		module: {
@@ -89,6 +88,7 @@ let config = function (env) {
 				entryFile,
 				path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")
 			]
+			returner.output.publicPath = "/"
 			returner.devtool = "eval-source-map"
 			returner.devServer = {
 				contentBase: path.join(__dirname, "www"),

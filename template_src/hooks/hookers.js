@@ -31,30 +31,24 @@ module.exports = function (ctx) {
 	
 	const sys = {
 		
-		deleteFolderRecursive(path) {
-			if( fs.existsSync(path) ) {
+		deleteFolderRecursive(path, doNotDeleteSelf = false) {
+			if (fs.existsSync(path)) {
 				fs.readdirSync(path).forEach((file) => {
 					let curPath = path + "/" + file
-					if(fs.lstatSync(curPath).isDirectory())
+					if (fs.lstatSync(curPath).isDirectory())
 						sys.deleteFolderRecursive(curPath);
 					else
 						fs.unlinkSync(curPath)
 				})
 				
-				fs.rmdirSync(path)
+				if (!doNotDeleteSelf)
+					fs.rmdirSync(path)
 			}
 		},
 		
 		cleanWww() {
-			let wwwDir = path.resolve(__dirname, "../www/"),
-				platformDir = path.resolve(wwwDir, "platform_cordova_files/"),
-				wwwConfig = path.resolve(wwwDir, "config.xml")
-			
-			if( fs.existsSync(platformDir) )
-				sys.deleteFolderRecursive(platformDir)
-			
-			if( fs.existsSync(wwwConfig) )
-				fs.unlinkSync(wwwConfig)
+			let wwwDir = path.resolve(__dirname, "../www/")
+			sys.deleteFolderRecursive(wwwDir, true)
 		},
 		
 		checkManifestFile() {
@@ -96,10 +90,10 @@ module.exports = function (ctx) {
 				configFile = path.resolve(__dirname, "../config.xml"),
 				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
-			if( conf("allow-navigation").length > 0 ) {
+			if (conf("allow-navigation").length > 0) {
 				let target = conf("allow-navigation")
 				
-				if( target.attr("data-href") != "" ) {
+				if (target.attr("data-href") != "") {
 					target.attr("href", target.attr("data-href"))
 					target.removeAttr("data-href")
 				}
@@ -129,12 +123,12 @@ module.exports = function (ctx) {
 			$('body').prepend(`<script>const localServerIp = "${getRouterIpAddr()}"</script>`).append(`<script src="cordova.js"></script>`)
 			fs.writeFileSync(targetFile, $.html())
 			
-			if( conf("allow-navigation").length == 0 )
+			if (conf("allow-navigation").length == 0)
 				conf("widget").append('<allow-navigation href="*" />')
 			else {
 				let target = conf("allow-navigation")
 				
-				if( target.attr("href") != "*" )
+				if (target.attr("href") != "*")
 					target.attr("data-href", target.attr("href")).attr("href", "*")
 			}
 			
@@ -170,7 +164,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				devServerSpawn = spawn( webpackDevServerPath, ['--env.devserver'], {
+				devServerSpawn = spawn(webpackDevServerPath, ['--env.devserver'], {
 					shell: true,
 					cwd: pRoot,
 					stdio: [process.stdin, 'pipe', 'pipe']
@@ -228,7 +222,7 @@ module.exports = function (ctx) {
 			)
 		},
 		
-		isFoundInCmdline( cmdCommand ) {
+		isFoundInCmdline(cmdCommand) {
 			return (
 				ctx.cmdLine.indexOf(`cordova ${cmdCommand}`) > -1 ||
 				ctx.cmdLine.indexOf(`phonegap ${cmdCommand}`) > -1
@@ -258,7 +252,7 @@ module.exports = function (ctx) {
 			if (isBuild || ((isRun || isEmulate || isPrepare) && !isLiveReload && !isNoBuild)) {
 				return sys.makeNonDevServerChanges().then(() => sys.startWebpackBuild(isRelease))
 			} else if (isServe || (isRun || isEmulate) && isLiveReload) {
-				return sys.makeDevServerChanges().then( () => sys.startWebpackDevServer() )
+				return sys.makeDevServerChanges().then(() => sys.startWebpackDevServer())
 			}
 			else
 				return sys.emptyDefer()
