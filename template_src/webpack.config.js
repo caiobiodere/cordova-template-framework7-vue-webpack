@@ -41,12 +41,6 @@ let config = function (env) {
 				{test: /\.(png|jpe?g|gif)$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
 				{test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
 				{test: /\.svg$/, loader: 'url-loader'},
-				{
-					test: /\.css$/, loader: ExtractTextPlugin.extract({
-					fallbackLoader: "style-loader",
-					loader: "css-loader"
-				})
-				},
 				{test: /\.s[ca]ss$/, loader: ['style-loader', 'css-loader', 'sass-loader']},
 				{test: /\.json$/, loader: 'json-loader'},
 				{test: /\.vue$/, loader: 'vue-loader'}
@@ -73,28 +67,34 @@ let config = function (env) {
 					collapseWhitespace: true,
 					minifyCSS: true
 				}
-			}),
-			new ExtractTextPlugin("styles.css")
+			})
 		]
 	}
 	
 	if (typeof env == "undefined" || typeof env.devserver == "undefined") {
 		returner.plugins.push(new CordovaHtmlOutputPlugin())
+		returner.plugins.push(new ExtractTextPlugin("styles.css"))
+		returner.module.rules.push({
+			test: /\.css$/, loader: ExtractTextPlugin.extract({
+				fallbackLoader: "style-loader",
+				loader: "css-loader"
+			})
+		})
 	}
 	
 	if (env) {
 		if (typeof env.devserver != 'undefined' && env.devserver) {
+			returner.module.rules.push({
+				test: /\.css$/, loader: ['style-loader', 'css-loader']
+			})
 			returner.entry = [
 				entryFile,
 				path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")
 			]
 			returner.output.publicPath = "/"
-			returner.devtool = "eval-source-map"
+			returner.devtool = "eval"
 			returner.devServer = {
 				contentBase: path.join(__dirname, "www"),
-				compress: false,
-				hot: false,
-				inline: true,
 				port: devServerPort,
 				stats: {colors: true},
 				watchOptions: {
@@ -106,7 +106,7 @@ let config = function (env) {
 				},
 				host: "0.0.0.0"
 			}
-			
+			returner.plugins.push(new webpack.NamedModulesPlugin())
 		} else if (typeof env.release != 'undefined' && env.release) {
 			returner.plugins.push(new CleanPlugin("www", {
 				root: path.join(__dirname, "."),

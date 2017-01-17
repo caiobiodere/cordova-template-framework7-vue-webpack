@@ -43,7 +43,3 @@ new Vue({
 		app: App
 	}
 });
-
-if (module.hot) {
-	module.hot.accept();
-}

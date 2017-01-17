@@ -1,3 +1,6 @@
+## 17.01.2017 - 1.0.3
+* Dev-server supports hot-module-replacement now!
+
 ## 16.01.2017 - 1.0.1
 * Supports phonegap now!
 * Template now uses `webpack-dev-server` for live-reload. So cordova-plugin-browsersync dependency dropped.

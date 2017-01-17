@@ -184,7 +184,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				devServerSpawn = spawn(webpackDevServerPath, ['--env.devserver'], {
+				devServerSpawn = spawn(webpackDevServerPath, ['--hot', '--inline', '--env.devserver'], {
 					shell: true,
 					cwd: pRoot,
 					stdio: [process.stdin, 'pipe', 'pipe']
