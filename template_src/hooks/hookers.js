@@ -17,7 +17,7 @@ module.exports = function (ctx) {
 		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server"),
 		packageJsonPath = path.resolve(__dirname, "../package.json"),
 		
-		package = require(packageJsonPath)
+		packageJson = require(packageJsonPath)
 	
 	function getRouterIpAddr() {
 		for (key in ifaces) {
@@ -42,11 +42,11 @@ module.exports = function (ctx) {
 		},
 		
 		checkPackageName() {
-			if (typeof package.name == "undefined" || package.name == "") {
-				package.name = "hello-world"
-			} else if (/\s/g.test(package.name)) {
-				package.name = sys.toKebabCase(package.name)
-				fs.writeFileSync(packageJsonPath, JSON.stringify(package), 'utf-8')
+			if (typeof packageJson.name == "undefined" || package.name == "") {
+				packageJson.name = "hello-world"
+			} else if (/\s/g.test(packageJson.name)) {
+				packageJson.name = sys.toKebabCase(packageJson.name)
+				fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson), 'utf-8')
 			}
 		},
 		
