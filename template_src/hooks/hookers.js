@@ -187,7 +187,7 @@ module.exports = function (ctx) {
 				devServerSpawn = spawn(webpackDevServerPath, ['--hot', '--inline', '--env.devserver'], {
 					shell: true,
 					cwd: pRoot,
-					stdio: [process.stdin, 'pipe', 'pipe']
+					stdio: [process.stdin, 'pipe', process.stderr]
 				})
 			
 			devServerSpawn.on('error', (err) => {
