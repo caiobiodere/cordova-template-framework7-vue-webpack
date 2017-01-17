@@ -42,7 +42,7 @@ module.exports = function (ctx) {
 		},
 		
 		checkPackageName() {
-			if (typeof packageJson.name == "undefined" || package.name == "") {
+			if (typeof packageJson.name == "undefined" || packageJson.name == "") {
 				packageJson.name = "hello-world"
 			} else if (/\s/g.test(packageJson.name)) {
 				packageJson.name = sys.toKebabCase(packageJson.name)
