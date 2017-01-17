@@ -1,4 +1,4 @@
-## 17.01.2017 - 1.0.3
+## 17.01.2017 - 1.0.4
 * Dev-server supports hot-module-replacement now!
 
 ## 16.01.2017 - 1.0.1
