@@ -37,13 +37,12 @@ let config = function (env) {
 		
 		module: {
 			rules: [
-				{test: /\.js?$/, loader: 'source-map-loader', enforce: 'pre'},
-				{test: /\.(png|jpe?g|gif)$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-				{test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-				{test: /\.svg$/, loader: 'url-loader'},
-				{test: /\.s[ca]ss$/, loader: ['style-loader', 'css-loader', 'sass-loader']},
-				{test: /\.json$/, loader: 'json-loader'},
-				{test: /\.vue$/, loader: 'vue-loader'}
+				{test: /\.js?$/, use: 'source-map-loader', enforce: 'pre'},
+				{test: /\.(png|jpe?g|gif)$/, use: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
+				{test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, use: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
+				{test: /\.svg$/, use: 'url-loader'},
+				{test: /\.s[ca]ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
+				{test: /\.vue$/, use: 'vue-loader'}
 			]
 		},
 		
@@ -53,7 +52,6 @@ let config = function (env) {
 					'NODE_ENV': JSON.stringify((env && typeof env != "undefined" && env.release) ? 'production' : 'development')
 				}
 			}),
-			new webpack.optimize.OccurrenceOrderPlugin(),
 			new HtmlWebpackPlugin({
 				filename: 'index.html',
 				template: 'src/index.html',
@@ -75,7 +73,7 @@ let config = function (env) {
 		returner.plugins.push(new CordovaHtmlOutputPlugin())
 		returner.plugins.push(new ExtractTextPlugin("styles.css"))
 		returner.module.rules.push({
-			test: /\.css$/, loader: ExtractTextPlugin.extract({
+			test: /\.css$/, use: ExtractTextPlugin.extract({
 				fallbackLoader: "style-loader",
 				loader: "css-loader"
 			})
@@ -85,7 +83,7 @@ let config = function (env) {
 	if (env) {
 		if (typeof env.devserver != 'undefined' && env.devserver) {
 			returner.module.rules.push({
-				test: /\.css$/, loader: ['style-loader', 'css-loader']
+				test: /\.css$/, use: ['style-loader', 'css-loader']
 			})
 			returner.entry = [
 				entryFile,
@@ -117,7 +115,6 @@ let config = function (env) {
 					cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
 					debug: true,
 					minimize: true,
-					sourceMap: false,
 					output: {
 						comments: false
 					},
