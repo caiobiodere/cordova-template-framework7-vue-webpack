@@ -37,12 +37,12 @@ let config = function (env) {
 		
 		module: {
 			rules: [
-				{test: /\.js?$/, use: 'source-map-loader', enforce: 'pre'},
-				{test: /\.(png|jpe?g|gif)$/, use: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-				{test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, use: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-				{test: /\.svg$/, use: 'url-loader'},
-				{test: /\.s[ca]ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
-				{test: /\.vue$/, use: 'vue-loader'}
+				{test: /\.js?$/, loader: 'source-map-loader', enforce: 'pre'},
+				{test: /\.(png|jpe?g|gif)$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
+				{test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
+				{test: /\.svg$/, loader: 'url-loader'},
+				{test: /\.s[ca]ss$/, loader: ['style-loader', 'css-loader', 'sass-loader']},
+				{test: /\.vue$/, loader: 'vue-loader'}
 			]
 		},
 		
@@ -83,7 +83,7 @@ let config = function (env) {
 	if (env) {
 		if (typeof env.devserver != 'undefined' && env.devserver) {
 			returner.module.rules.push({
-				test: /\.css$/, use: ['style-loader', 'css-loader']
+				test: /\.css$/, loader: ['style-loader', 'css-loader']
 			})
 			returner.entry = [
 				entryFile,
