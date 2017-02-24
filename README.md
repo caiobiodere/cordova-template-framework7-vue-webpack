@@ -34,9 +34,7 @@ This template uses:
 * **Cordova:** _6.0.0_
 * **Node.js:** _6.5.0_ (Supports ES6)
 
-## ~WARNING: Currently live reload command not working in Mac OS and Linux. I'll update template when next `extract-text-webpack-plugin` stable version released.~
-
-## Stable version of `extract-text-webpack-plugin` released today. I'll update the template tomorrow.
+## WARNING (For Linux and Mac OS users): Currently live reload command not working in Mac OS and Linux. Stable version of `extract-text-webpack-plugin` released today(24.02.2017), i'll start to update 25.02.2017.
 
 ---
 
