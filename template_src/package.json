@@ -14,6 +14,7 @@
     "clean-webpack-plugin": "^0.1.15",
     "css-loader": "^0.26.1",
     "device.js": "git+https://github.com/matthewhudson/device.js.git",
+    "epipebomb": "^1.0.0",
     "extract-text-webpack-plugin": "git+https://github.com/webpack/extract-text-webpack-plugin.git",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.4",

@@ -14,6 +14,7 @@ module.exports = function (ctx) {
 		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
 		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json"),
 		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack"),
+		epipeBombPath = path.resolve(nodeModulesPath, ".bin/epipebomb"),
 		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server"),
 		packageJsonPath = path.resolve(__dirname, "../package.json"),
 		
@@ -85,7 +86,7 @@ module.exports = function (ctx) {
 			if (!fs.existsSync(nodeModulesPath) || !fs.existsSync(path.resolve(nodeModulesPath, "cheerio/"))) {
 				console.log('Node modules not found. Installing...')
 				
-				exec('npm i', {cwd: pRoot}, (error) => {
+				exec('npm i', {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
 					if (error) {
 						console.error(`Error happened when npm install: ${error}`);
 						defer.reject(new Error(`Error happened when npm install: ${error}`))
@@ -132,7 +133,7 @@ module.exports = function (ctx) {
 				srcFile = path.resolve(__dirname, "../webpack/dev_helpers/device_router.html"),
 				targetFile = path.resolve(wwwFolder, "index.html"),
 				
-				defaultCsp = "default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8080 http://LOCIP:8080; object-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; frame-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080; font-src *; connect-src 'self' data: http://127.0.0.1:8080 http://LOCIP:8080",
+				defaultCsp = "default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8081 http://LOCIP:8081; object-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; frame-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; font-src *; connect-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081",
 				
 				cheerio = require("cheerio"),
 				$ = cheerio.load(fs.readFileSync(srcFile, 'utf-8')),
@@ -165,7 +166,7 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: pRoot}, (error) => {
+			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
@@ -184,7 +185,7 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				devServerSpawn = spawn(webpackDevServerPath, ['--hot', '--inline', '--env.devserver'], {
+				devServerSpawn = spawn(epipeBombPath, [webpackDevServerPath, '--hot', '--inline', '--env.devserver'], {
 					shell: true,
 					cwd: pRoot,
 					stdio: [process.stdin, 'pipe', process.stderr]
@@ -203,7 +204,7 @@ module.exports = function (ctx) {
 				if (!isResultFound) {
 					outText += data
 					
-					if (outText.indexOf('bundle is now VALID.') > -1) {
+					if (outText.indexOf('bundle is now VALID.') > -1 || outText.indexOf('Compiled successfully.') > -1) {
 						isResultFound = true
 						outText = ""
 						

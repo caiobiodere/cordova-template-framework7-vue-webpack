@@ -9,7 +9,7 @@ const path = require('path'),
 	ExtractTextPlugin = require("extract-text-webpack-plugin"),
 	
 	entryFile = path.join(__dirname, 'src/main.js'),
-	devServerPort = 8080
+	devServerPort = 8081
 
 let config = function (env) {
 	let returner = {

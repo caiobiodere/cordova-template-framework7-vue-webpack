@@ -80,7 +80,7 @@
 	
 	<div id="unavailable">
 		<p>
-			It seems we can't connect to<br>127.0.0.1:8080<br><script>document.write(localServerIp)</script>:8080<br><br>
+			It seems we can't connect to<br>127.0.0.1:8081<br><script>document.write(localServerIp)</script>:8081<br><br>
 			You can test yourself with next inputs:
 		</p>
 		
@@ -89,7 +89,7 @@
 		</div>
 		
 		<div class="input_wrap">
-			<input type="text" placeholder="Server Ip:Port (like 192.168.0.2:8080)" disabled>
+			<input type="text" placeholder="Server Ip:Port (like 192.168.0.2:8081)" disabled>
 		</div>
 		
 		<div class="input_wrap">
@@ -110,8 +110,8 @@
 		})
 		
 		function startRedirectChecks() {
-			testConnection('127.0.0.1:8080', goUrl, function() {
-				testConnection(`${localServerIp}:8080`, goUrl, ajaxErr)
+			testConnection('127.0.0.1:8081', goUrl, function() {
+				testConnection(`${localServerIp}:8081`, goUrl, ajaxErr)
 			})
 		}
 		
