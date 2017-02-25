@@ -1,6 +1,6 @@
 {
   "name": "cordova-template-framework7-vue-webpack",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Cordova template with framework7, vue 2 and webpack 2.",
   "main": "index.js",
   "scripts": {
