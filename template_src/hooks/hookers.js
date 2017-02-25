@@ -185,11 +185,19 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = "",
 				isResultFound = false,
-				devServerSpawn = spawn(epipeBombPath, [webpackDevServerPath, '--hot', '--inline', '--env.devserver'], {
-					shell: true,
-					cwd: pRoot,
-					stdio: [process.stdin, 'pipe', process.stderr]
-				})
+				args = [webpackDevServerPath, '--hot', '--inline', '--env.devserver'],
+				run = epipeBombPath
+			
+			if( os.platform() == 'win32' ) {
+				args = ['--hot', '--inline', '--env.devserver']
+				run = webpackDevServerPath
+			}
+				
+			let devServerSpawn = spawn(run, args, {
+				shell: true,
+				cwd: pRoot,
+				stdio: [process.stdin, 'pipe', process.stderr]
+			})
 			
 			devServerSpawn.on('error', (err) => {
 				console.log('Failed to start webpack dev server!')
