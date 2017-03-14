@@ -212,7 +212,7 @@ module.exports = function (ctx) {
 				if (!isResultFound) {
 					outText += data
 					
-					if (outText.indexOf('bundle is now VALID.') > -1 || outText.indexOf('Compiled successfully.') > -1) {
+					if (outText.indexOf('bundle is now VALID.') > -1 || outText.indexOf('Compiled successfully.') > -1 || outText.indexOf('Compiled with warnings') > -1 ) {
 						isResultFound = true
 						outText = ""
 						

@@ -4,7 +4,7 @@ const path = require('path'),
 	webpack = require('webpack'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
 	CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js'),
-	UglifyJsPlugin = require('webpack-uglify-js-plugin'),
+	UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
 	CleanPlugin = require('clean-webpack-plugin'),
 	ExtractTextPlugin = require("extract-text-webpack-plugin"),
 	
@@ -74,8 +74,8 @@ let config = function (env) {
 		returner.plugins.push(new ExtractTextPlugin("styles.css"))
 		returner.module.rules.push({
 			test: /\.css$/, use: ExtractTextPlugin.extract({
-				fallbackLoader: "style-loader",
-				loader: "css-loader"
+				fallback: "style-loader",
+				use: "css-loader"
 			})
 		})
 	}
@@ -109,20 +109,10 @@ let config = function (env) {
 			returner.plugins.push(new CleanPlugin("www", {
 				root: path.join(__dirname, "."),
 				dry: false,
+				verbose: false,
 				exclude: ["index.html"]
 			}))
-			returner.plugins.push(new UglifyJsPlugin({
-					cacheFolder: path.resolve(__dirname, 'webpack/cached_uglify/'),
-					debug: true,
-					minimize: true,
-					output: {
-						comments: false
-					},
-					compressor: {
-						warnings: false
-					}
-				}
-			))
+			returner.plugins.push(new UglifyJsPlugin())
 		}
 	}
 	
