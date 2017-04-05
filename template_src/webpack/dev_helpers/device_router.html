@@ -98,7 +98,7 @@
 	</div>
 
 	<script>
-		let deviceReadyChecker = setTimeout(startRedirectChecks, 5000)
+		var deviceReadyChecker = setTimeout(startRedirectChecks, 5000)
 		
 		document.addEventListener("deviceready", function() {
 			clearTimeout(deviceReadyChecker)
@@ -111,12 +111,12 @@
 		
 		function startRedirectChecks() {
 			testConnection('127.0.0.1:8081', goUrl, function() {
-				testConnection(`${localServerIp}:8081`, goUrl, ajaxErr)
+				testConnection(localServerIp + ':8081', goUrl, ajaxErr)
 			})
 		}
 		
 		function tryConnect() {
-			let ipTest = /^([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{1,6})?$/,
+			var ipTest = /^([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{1,6})?$/,
 					ipPort = document.querySelector("input").value
 			
 			if( ipTest.test(ipPort) )
@@ -124,15 +124,15 @@
 		}
 		
 		function testConnection( ipPort, callback, errCallback ) {
-			let xhr = new XMLHttpRequest()
+			var xhr = new XMLHttpRequest()
 			
 			document.querySelector("button").disabled = true
 			document.querySelector("input").disabled = true
-			document.querySelector("#status_text").innerText = `Trying to connect http://${ipPort}`
+			document.querySelector("#status_text").innerText = "Trying to connect http://" + ipPort
 			
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4 && xhr.status === 200) {
-					document.querySelector("#status_text").innerText = `Connection to 'http://${ipPort}/' success! Redirecting...`
+					document.querySelector("#status_text").innerText = "Connection to 'http://" + ipPort + "/' success! Redirecting..."
 					
 					if( typeof callback == "function" )
 						callback(ipPort)
@@ -140,24 +140,24 @@
 				else if (xhr.readyState === 4 && xhr.status != 200) {
 					document.querySelector("button").disabled = false
 					document.querySelector("input").disabled = false
-					document.querySelector("#status_text").innerText = `Connection to 'http://${ipPort}/' failed!`
+					document.querySelector("#status_text").innerText = "Connection to 'http://" + ipPort + "/' failed!"
 					
 					if(typeof errCallback == "function")
 						errCallback(ipPort)
 				}
 			}
 			
-			xhr.open('GET', `http://${ipPort}/`)
+			xhr.open('GET', 'http://' + ipPort + '/')
 			xhr.send(null)
 		}
 		
 		function goUrl(ipPort) {
-			setTimeout( () => { window.location.href = `http://${ipPort}/` }, 1500)
+			setTimeout( function () { window.location.href = 'http://' + ipPort + '/' }, 1500)
 		}
 		
 		function ajaxErr(ipPort) {
 			document.querySelector("#unavailable p").style.display = "block"
-			console.log(`Can't connect to http://${ipPort}/`)
+			console.log('Can\'t connect to http://' + ipPort + '/')
 		}
 		
 	</script>
