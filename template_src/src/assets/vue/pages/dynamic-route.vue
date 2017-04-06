@@ -13,7 +13,7 @@
 				</li>
 				<li><b>Query:</b>
 					<ul>
-						<li v-for="(value, key) in $route.query" :key="'param-' + key"><b>{{key}}:</b> {{value}}</li>
+						<li v-for="(value, key) in $route.query" :key="'query-' + key"><b>{{key}}:</b> {{value}}</li>
 					</ul>
 				</li>
 				<li><b>Route:</b> {{$route.route}}</li>
