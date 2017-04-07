@@ -1,3 +1,15 @@
+## 07.04.2017 - 1.0.11
+* Fixed Device_router.html has been made compatible with Android < 4.4.0.
+* Fixed key to vue lists
+> Thanks for **konstantin-popov** for fixes.
+* Added .editorconfig and files edited with this config.
+
+## 14.03.2017 - 1.0.10
+* Added epipebomb for linux and mac os.
+* Fixed webpack ^2.2.1 support
+* Fixed buffer size for webpack outputs
+* Updated uglify js version to latest (for ES6 features)
+
 ## 17.01.2017 - 1.0.4
 * Dev-server supports hot-module-replacement now!
 

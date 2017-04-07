@@ -1,6 +1,6 @@
 {
   "name": "cordova-template-framework7-vue-webpack",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Cordova template with framework7, vue 2 and webpack 2.",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,12 @@
     "ecosystem:phonegap",
     "ecosystem:cordova",
     "cordova:template",
-    "phonegap:template"
+    "phonegap:template",
+    "cordova-template",
+    "template",
+    "webpack",
+    "vue.js",
+    "vue"
   ],
   "author": "Oguz Ozcan",
   "license": "Apache-2.0"
