@@ -1,3 +1,7 @@
+## 25.04.2017 - 1.0.12
+* Provided compatibility with latest webpack-dev-server update. Added ip:port to public argument for live reload.
+* The double nails were standardized as single nails in `beforedep.js` and `hookers.js`.
+
 ## 07.04.2017 - 1.0.11
 * Fixed Device_router.html has been made compatible with Android < 4.4.0.
 * Fixed key to vue lists

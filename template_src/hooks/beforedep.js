@@ -10,7 +10,7 @@ module.exports = function (ctx) {
 	const sys = {
 		getPlatformDir(platform, cordovaFile) {
 			
-			if( platform == 'android')
+			if( platform === 'android')
 				return path.resolve(__dirname, `../platforms/${platform}/assets/www/${cordovaFile ? "cordova.js" : ""}`)
 			else
 				return path.resolve(__dirname, `../platforms/${platform}/www/${cordovaFile ? "cordova.js" : ""}`)
@@ -52,18 +52,18 @@ module.exports = function (ctx) {
 		
 		checkOption(name) {
 			return (
-				typeof ctx.opts != "undefined" &&
-				typeof ctx.opts.options != "undefined" &&
-				typeof ctx.opts.options[name] != "undefined" &&
+				typeof ctx.opts !== "undefined" &&
+				typeof ctx.opts.options !== "undefined" &&
+				typeof ctx.opts.options[name] !== "undefined" &&
 				ctx.opts.options[name] === true
 			)
 		},
 		
 		checkArgv(name) {
 			return (
-				typeof ctx.opts != "undefined" &&
-				typeof ctx.opts.options != "undefined" &&
-				typeof ctx.opts.options.argv != "undefined" &&
+				typeof ctx.opts !== "undefined" &&
+				typeof ctx.opts.options !== "undefined" &&
+				typeof ctx.opts.options.argv !== "undefined" &&
 				(
 					Array.isArray(ctx.opts.options.argv) &&
 					ctx.opts.options.argv.indexOf(name) > -1 ||
@@ -87,7 +87,7 @@ module.exports = function (ctx) {
 		isServe = sys.isFoundInCmdline('serve'),
 		isLiveReload = sys.checkArgv('--live-reload') || sys.checkArgv('--lr') || sys.checkArgv('lr') || sys.checkArgv('live-reload')
 	
-	if (ctx.opts.platforms.length == 0 && !isPrepare) {
+	if (ctx.opts.platforms.length === 0 && !isPrepare) {
 		console.log("Update happened. Skipping...")
 		deferral.resolve()
 	}

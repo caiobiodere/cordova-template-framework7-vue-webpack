@@ -9,28 +9,32 @@ module.exports = function (ctx) {
 		exec = cp.exec,
 		pRoot = ctx.opts.projectRoot,
 		
-		nodeModulesPath = path.resolve(pRoot, "node_modules/"),
-		wwwFolder = path.resolve(pRoot, "www/"),
-		manifestFileSrcPath = path.resolve(pRoot, "src/manifest.json"),
-		manifestFileCopyPath = path.resolve(wwwFolder, "manifest.json"),
-		webpackPath = path.resolve(nodeModulesPath, ".bin/webpack"),
-		epipeBombPath = path.resolve(nodeModulesPath, ".bin/epipebomb"),
-		webpackDevServerPath = path.resolve(nodeModulesPath, ".bin/webpack-dev-server"),
-		packageJsonPath = path.resolve(__dirname, "../package.json"),
+		nodeModulesPath = path.resolve(pRoot, 'node_modules/'),
+		wwwFolder = path.resolve(pRoot, 'www/'),
+		manifestFileSrcPath = path.resolve(pRoot, 'src/manifest.json'),
+		manifestFileCopyPath = path.resolve(wwwFolder, 'manifest.json'),
+		webpackPath = path.resolve(nodeModulesPath, '.bin/webpack'),
+		epipeBombPath = path.resolve(nodeModulesPath, '.bin/epipebomb'),
+		webpackDevServerPath = path.resolve(nodeModulesPath, '.bin/webpack-dev-server'),
+		packageJsonPath = path.resolve(__dirname, '../package.json'),
 		
 		packageJson = require(packageJsonPath)
 	
 	function getRouterIpAddr() {
-		for (key in ifaces) {
-			for (ipInfoKey in  ifaces[key]) {
-				let ipInfo = ifaces[key][ipInfoKey]
-				
-				if (ipInfo.family == 'IPv4' && ipInfo.address.indexOf("192.168.") === 0 && !ipInfo.internal)
-					return ipInfo.address
-			}
+		for (let key in ifaces) {
+		  if( ifaces.hasOwnProperty(key) ) {
+        for (let ipInfoKey in ifaces[key]) {
+          if( ifaces[key].hasOwnProperty(ipInfoKey) ) {
+            let ipInfo = ifaces[key][ipInfoKey]
+  
+            if (ipInfo.family === 'IPv4' && ipInfo.address.indexOf('192.168.') === 0 && !ipInfo.internal)
+              return ipInfo.address
+          }
+        }
+      }
 		}
 		
-		return "127.0.0.1"
+		return '127.0.0.1'
 	}
 	
 	
@@ -43,8 +47,8 @@ module.exports = function (ctx) {
 		},
 		
 		checkPackageName() {
-			if (typeof packageJson.name == "undefined" || packageJson.name == "") {
-				packageJson.name = "hello-world"
+			if (typeof packageJson.name === 'undefined' || packageJson.name === '') {
+				packageJson.name = 'hello-world'
 			} else if (/\s/g.test(packageJson.name)) {
 				packageJson.name = sys.toKebabCase(packageJson.name)
 				fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson), 'utf-8')
@@ -54,7 +58,7 @@ module.exports = function (ctx) {
 		deleteFolderRecursive(path, doNotDeleteSelf = false) {
 			if (fs.existsSync(path)) {
 				fs.readdirSync(path).forEach((file) => {
-					let curPath = path + "/" + file
+					let curPath = path + '/' + file
 					if (fs.lstatSync(curPath).isDirectory())
 						sys.deleteFolderRecursive(curPath);
 					else
@@ -67,13 +71,13 @@ module.exports = function (ctx) {
 		},
 		
 		cleanWww() {
-			let wwwDir = path.resolve(__dirname, "../www/")
+			let wwwDir = path.resolve(__dirname, '../www/')
 			sys.deleteFolderRecursive(wwwDir, true)
 		},
 		
 		checkManifestFile() {
 			if (fs.existsSync(manifestFileSrcPath)) {
-				console.log("Manifest.json found in src folder. Copying...")
+				console.log('Manifest.json found in src folder. Copying...')
 				fs.writeFileSync(manifestFileCopyPath, fs.readFileSync(manifestFileSrcPath))
 			}
 		},
@@ -83,7 +87,7 @@ module.exports = function (ctx) {
 			
 			console.log('Checking is node modules installed...')
 			
-			if (!fs.existsSync(nodeModulesPath) || !fs.existsSync(path.resolve(nodeModulesPath, "cheerio/"))) {
+			if (!fs.existsSync(nodeModulesPath) || !fs.existsSync(path.resolve(nodeModulesPath, 'cheerio/'))) {
 				console.log('Node modules not found. Installing...')
 				
 				exec('npm i', {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
@@ -106,16 +110,16 @@ module.exports = function (ctx) {
 		
 		makeNonDevServerChanges() {
 			let defer = new Q.defer(),
-				cheerio = require("cheerio"),
-				configFile = path.resolve(__dirname, "../config.xml"),
+				cheerio = require('cheerio'),
+				configFile = path.resolve(__dirname, '../config.xml'),
 				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
-			if (conf("allow-navigation").length > 0) {
-				let target = conf("allow-navigation")
+			if (conf('allow-navigation').length > 0) {
+				let target = conf('allow-navigation')
 				
-				if (target.attr("data-href") != "") {
-					target.attr("href", target.attr("data-href"))
-					target.removeAttr("data-href")
+				if (target.attr('data-href') !== '') {
+					target.attr('href', target.attr('data-href'))
+					target.removeAttr('data-href')
 				}
 			}
 			
@@ -129,29 +133,29 @@ module.exports = function (ctx) {
 		
 		makeDevServerChanges() {
 			let defer = new Q.defer(),
-				configFile = path.resolve(__dirname, "../config.xml"),
-				srcFile = path.resolve(__dirname, "../webpack/dev_helpers/device_router.html"),
-				targetFile = path.resolve(wwwFolder, "index.html"),
+				configFile = path.resolve(__dirname, '../config.xml'),
+				srcFile = path.resolve(__dirname, '../webpack/dev_helpers/device_router.html'),
+				targetFile = path.resolve(wwwFolder, 'index.html'),
 				
-				defaultCsp = "default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8081 http://LOCIP:8081; object-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; frame-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; font-src *; connect-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081",
+				defaultCsp = `default-src *; script-src 'self' data: 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:8081 http://LOCIP:8081; object-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; style-src 'self' 'unsafe-inline' data: ; img-src *; media-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; frame-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081; font-src *; connect-src 'self' data: http://127.0.0.1:8081 http://LOCIP:8081`,
 				
-				cheerio = require("cheerio"),
+				cheerio = require('cheerio'),
 				$ = cheerio.load(fs.readFileSync(srcFile, 'utf-8')),
 				conf = cheerio.load(fs.readFileSync(configFile), {xmlMode: true})
 			
 			sys.cleanWww()
 			
 			$('head').prepend(`<meta http-equiv="content-security-policy" content="${defaultCsp.replace(/LOCIP/g, getRouterIpAddr())}">`)
-			$('body').prepend(`<script>const localServerIp = "${getRouterIpAddr()}"</script>`).append(`<script src="cordova.js"></script>`)
+			$('body').prepend(`<script>const localServerIp = '${getRouterIpAddr()}'</script>`).append(`<script src="cordova.js"></script>`)
 			fs.writeFileSync(targetFile, $.html())
 			
-			if (conf("allow-navigation").length == 0)
-				conf("widget").append('<allow-navigation href="*" />')
+			if (conf('allow-navigation').length === 0)
+				conf('widget').append('<allow-navigation href="*" />')
 			else {
-				let target = conf("allow-navigation")
+				let target = conf('allow-navigation')
 				
-				if (target.attr("href") != "*")
-					target.attr("data-href", target.attr("href")).attr("href", "*")
+				if (target.attr('href') !== '*')
+					target.attr('data-href', target.attr('href')).attr('href', '*')
 			}
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
@@ -183,16 +187,16 @@ module.exports = function (ctx) {
 		
 		startWebpackDevServer() {
 			let defer = new Q.defer(),
-				outText = "",
+				outText = '',
 				isResultFound = false,
-				args = [webpackDevServerPath, '--hot', '--inline', '--env.devserver'],
+				args = [webpackDevServerPath, '--hot', '--inline', '--env.devserver', `--public ${getRouterIpAddr()}:8081`],
 				run = epipeBombPath
 			
-			if( os.platform() == 'win32' ) {
-				args = ['--hot', '--inline', '--env.devserver']
+			if( os.platform() === 'win32' ) {
+				args = ['--hot', '--inline', '--env.devserver', `--public ${getRouterIpAddr()}:8081`]
 				run = webpackDevServerPath
 			}
-				
+			
 			let devServerSpawn = spawn(run, args, {
 				shell: true,
 				cwd: pRoot,
@@ -214,7 +218,7 @@ module.exports = function (ctx) {
 					
 					if (outText.indexOf('bundle is now VALID.') > -1 || outText.indexOf('Compiled successfully.') > -1 || outText.indexOf('Compiled with warnings') > -1 ) {
 						isResultFound = true
-						outText = ""
+						outText = ''
 						
 						defer.resolve()
 					}
@@ -234,18 +238,18 @@ module.exports = function (ctx) {
 		
 		checkOption(name) {
 			return (
-				typeof ctx.opts != "undefined" &&
-				typeof ctx.opts.options != "undefined" &&
-				typeof ctx.opts.options[name] != "undefined" &&
+				typeof ctx.opts !== 'undefined' &&
+				typeof ctx.opts.options !== 'undefined' &&
+				typeof ctx.opts.options[name] !== 'undefined' &&
 				ctx.opts.options[name] === true
 			)
 		},
 		
 		checkArgv(name) {
 			return (
-				typeof ctx.opts != "undefined" &&
-				typeof ctx.opts.options != "undefined" &&
-				typeof ctx.opts.options.argv != "undefined" &&
+				typeof ctx.opts !== 'undefined' &&
+				typeof ctx.opts.options !== 'undefined' &&
+				typeof ctx.opts.options.argv !== 'undefined' &&
 				(
 					Array.isArray(ctx.opts.options.argv) &&
 					ctx.opts.options.argv.indexOf(name) > -1 ||
@@ -272,12 +276,12 @@ module.exports = function (ctx) {
 		isNoBuild = sys.checkOption('no-build'),
 		isRelease = sys.checkOption('release')
 	
-	if (ctx.opts.platforms.length == 0 && !isPrepare) {
-		console.log("Update happened. Skipping...")
+	if (ctx.opts.platforms.length === 0 && !isPrepare) {
+		console.log('Update happened. Skipping...')
 		deferral.resolve()
 	}
 	else {
-		console.log("Before deploy hook started...")
+		console.log('Before deploy hook started...')
 		
 		// if package name contains space characters, we'll convert it to kebab case. Required for npm install command to work.
 		sys.checkPackageName()
@@ -293,11 +297,11 @@ module.exports = function (ctx) {
 				return sys.emptyDefer()
 		})
 		.then(() => {
-			console.log("Cordova hook completed. Resuming to run your cordova command...")
+			console.log('Cordova hook completed. Resuming to run your cordova command...')
 			deferral.resolve()
 		})
 		.catch((err) => {
-			console.log("Error happened on main chain:")
+			console.log('Error happened on main chain:')
 			console.log(err)
 			
 			deferral.reject(err)
