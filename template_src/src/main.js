@@ -16,7 +16,7 @@ import Framework7ThemeColors from 'framework7/dist/css/framework7.ios.colors.min
  */
 
 // Import App Custom Styles
-import AppStyles from './assets/static/sass/main.scss'
+import AppStyles from './assets/sass/main.scss'
 
 // Import Routes
 import Routes from './routes.js'

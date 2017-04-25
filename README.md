@@ -38,9 +38,9 @@ This template uses:
 
 For live-reload i can't find easy way to do fixed version of this. But you can develop your app with this way:
 
-1. cordova platform add ios browser (browser needs for development in live-reload mode.)
-2. cordova run ios -- --lr (wait till app opens in your ios emulator or phone. it will close console output after publish, so live-reload will not work. don't close the app and go to next step.)
-3. cordova run browser -- --lr (you can use live-reload in your phone-emulator and browser at same time. you can edit your files in live-reload mode now.)
+1. `cordova platform add ios browser` (browser needs for development in live-reload mode.)
+2. `cordova run ios -- --lr` (wait till app opens in your ios emulator or phone. it will close console output after publish, so live-reload will not work. don't close the app and go to next step.)
+3. `cordova run browser -- --lr` (you can use live-reload in your phone-emulator and browser at same time. you can edit your files in live-reload mode now.)
 
 ---
 
@@ -50,6 +50,7 @@ Hooks are smart. They can fix some problems for you. Fix list:
 * `npm install` Automatically checks node js dependencies.
 * `package.json` Renames `name` variable if it has a space characters and auto saves. (It needed for npm install)
 * `www` Automatically manages `www` folder. You don't need to think about www folder. Your target is always `src` folder.
+* `static` Static assets automatically sync on live reload!
 * `CordovaHtmlOutputPlugin` Automatically adds `cordova.js` to html. You don't need to add to your file manually. It's helpful for webpack.
 * `manifest.json` Some cordova plugins needs manifest.json in root folder. If you add manifest.json file to your `src` folder, our smart hooks automagically copy it to `www` folder!
 
@@ -60,6 +61,8 @@ Hooks are smart. They can fix some problems for you. Fix list:
 * `CordovaDeviceRouter.js` In live-reload mode, you can connect to server from multiple devices. This file inject right `cordova.js` file to page. So you can connect to webpack-dev-server from multiple devices at same time.
 
 ## Installation
+### IMPORTANT: Phonegap build tools not supported currently. I suggest to use cordova with this template.
+
 This template need cordova or phonegap, for more information [cordova installation](https://cordova.apache.org/docs/en/latest/guide/cli/) or [phonegap installation](http://docs.phonegap.com/getting-started/1-install-phonegap/desktop/).
 
 Our Magic words:

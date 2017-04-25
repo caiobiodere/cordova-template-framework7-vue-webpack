@@ -1,6 +1,6 @@
 {
   "name": "cordova-template-framework7-vue-webpack",
-  "version": "1.0.12",
+  "version": "1.1.0",
   "description": "Cordova template with framework7, vue 2 and webpack 2.",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,8 @@
     "vue"
   ],
   "author": "Oguz Ozcan",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chokidar": "^1.6.1"
+  }
 }

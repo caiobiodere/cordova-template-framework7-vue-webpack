@@ -1,3 +1,8 @@
+## 25.04.2017 - 1.1.0
+* Added static folder for static assets. Static folder directly copies to www folder on compile time also static folder automatically sync with www/static when you are using live-reload.
+* Directory structure changed.
+* Dependency added: `chokidar`
+
 ## 25.04.2017 - 1.0.12
 * Provided compatibility with latest webpack-dev-server update. Added ip:port to public argument for live reload.
 * The double nails were standardized as single nails in `beforedep.js` and `hookers.js`.

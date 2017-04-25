@@ -11,6 +11,8 @@ module.exports = function (ctx) {
 		
 		nodeModulesPath = path.resolve(pRoot, 'node_modules/'),
 		wwwFolder = path.resolve(pRoot, 'www/'),
+		staticFolder = path.resolve(pRoot, 'src/static/'),
+		targetStaticFolder = path.resolve(wwwFolder, 'static/'),
 		manifestFileSrcPath = path.resolve(pRoot, 'src/manifest.json'),
 		manifestFileCopyPath = path.resolve(wwwFolder, 'manifest.json'),
 		webpackPath = path.resolve(nodeModulesPath, '.bin/webpack'),
@@ -125,7 +127,10 @@ module.exports = function (ctx) {
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
 			sys.cleanWww()
-			
+      
+      sys.deleteFolderRecursive(targetStaticFolder, true)
+      sys.copyRecursiveSync(staticFolder, targetStaticFolder)
+      
 			defer.resolve()
 			
 			return defer.promise
@@ -159,7 +164,11 @@ module.exports = function (ctx) {
 			}
 			
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
-			
+      
+      sys.deleteFolderRecursive(targetStaticFolder, true)
+      sys.copyRecursiveSync(staticFolder, targetStaticFolder)
+      sys.watchStaticFolder()
+      
 			defer.resolve()
 			
 			return defer.promise
@@ -263,7 +272,107 @@ module.exports = function (ctx) {
 				ctx.cmdLine.indexOf(`cordova ${cmdCommand}`) > -1 ||
 				ctx.cmdLine.indexOf(`phonegap ${cmdCommand}`) > -1
 			)
-		}
+		},
+    
+    deleteFolderRecursive(path, doNotDeleteSelf = false) {
+      if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach((file) => {
+          let curPath = path + '/' + file
+          if (fs.lstatSync(curPath).isDirectory())
+            sys.deleteFolderRecursive(curPath);
+          else
+            fs.unlinkSync(curPath)
+        })
+        
+        if (!doNotDeleteSelf)
+          fs.rmdirSync(path)
+      }
+    },
+    
+    copyRecursiveSync(src, dest) {
+      let exists = fs.existsSync(src),
+        stats = exists && fs.statSync(src),
+        isDirectory = exists && stats.isDirectory()
+      
+      if (exists && isDirectory) {
+        
+        if(!fs.existsSync(dest))
+          fs.mkdirSync(dest)
+        
+        fs.readdirSync(src).forEach((childItemName) => {
+          sys.copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName))
+        })
+      } else
+        fs.linkSync(src, dest)
+    },
+    
+    addUpdate(p) {
+      let rel = path.relative('./src/static/', p)
+      sys.copyFile(p, path.resolve(targetStaticFolder, rel))
+      
+      console.log(`${p} copied to ${path.resolve(targetStaticFolder, rel)}`)
+    },
+    
+    addDir(p) {
+      let rel = path.relative('./src/static/', p)
+      fs.mkdir(path.resolve(targetStaticFolder, rel), () => {
+        console.log(`Found ${p} folder. Created to ${path.resolve(targetStaticFolder, rel)}`)
+      })
+    },
+    
+    delete(p) {
+      let rel = path.relative('./src/static/', p)
+      
+      fs.access(path.resolve(targetStaticFolder, rel), fs.constants.W_OK, (err) => {
+        if( !err ) {
+          fs.unlink(path.resolve(targetStaticFolder, rel), () => {
+            console.log(`${path.resolve(targetStaticFolder, rel)} deleted.`)
+          })
+        } else {
+          console.log(`${path.resolve(targetStaticFolder, rel)} not deleted.`)
+        }
+      })
+    },
+    
+    copyFile(source, target, cb) {
+      let cbCalled = false
+      
+      let rd = fs.createReadStream(source)
+      rd.on("error", done)
+      
+      let wr = fs.createWriteStream(target)
+      wr.on("error", done)
+      wr.on("close", done)
+      rd.pipe(wr)
+      
+      function done(err) {
+        if (!cbCalled && typeof cb === 'function') {
+          cb(err)
+          cbCalled = true
+        }
+      }
+    },
+    
+    watchStaticFolder() {
+    
+		  if( fs.existsSync(staticFolder) ) {
+        
+        const chokidar = require('chokidar'),
+          watcher = chokidar.watch(staticFolder, {
+            persistent: true
+          })
+      
+        watcher.on('ready', () => {
+          console.log('Watcher ready!')
+          watcher
+          .on('add', sys.addUpdate)
+          .on('change', sys.addUpdate)
+          .on('unlink', sys.delete)
+          .on('addDir', sys.addDir)
+          .on('unlinkDir', sys.delete)
+        })
+      }
+    }
 	}
 	
 	let deferral = new Q.defer(),
