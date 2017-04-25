@@ -179,7 +179,9 @@ module.exports = function (ctx) {
 			
 			console.log('Starting webpack build...')
 			
-			exec(webpackPath + (isRelease ? ' --env.release' : ''), {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
+      let wpPath = webpackPath + (os.platform() === 'win32' ? '.cmd' : '')
+      
+			exec(`"${wpPath}"` + (isRelease ? ' --env.release' : ''), {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
@@ -198,12 +200,12 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = '',
 				isResultFound = false,
-				args = [webpackDevServerPath, '--hot', '--inline', '--env.devserver', `--public ${getRouterIpAddr()}:8081`],
+				args = [`"${webpackDevServerPath}"`, '--hot', '--inline', '--env.devserver', `--public ${getRouterIpAddr()}:8081`],
 				run = epipeBombPath
 			
 			if( os.platform() === 'win32' ) {
 				args = ['--hot', '--inline', '--env.devserver', `--public ${getRouterIpAddr()}:8081`]
-				run = webpackDevServerPath
+				run = `"${webpackDevServerPath}.cmd"`
 			}
 			
 			let devServerSpawn = spawn(run, args, {

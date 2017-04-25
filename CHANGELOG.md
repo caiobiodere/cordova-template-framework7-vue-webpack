@@ -1,3 +1,6 @@
+## 25.04.2017 - 1.1.1
+* Added whitespace support to command paths. You can use folder names with whitespace now.
+
 ## 25.04.2017 - 1.1.0
 * Added static folder for static assets. Static folder directly copies to www folder on compile time also static folder automatically sync with www/static when you are using live-reload.
 * Directory structure changed.
