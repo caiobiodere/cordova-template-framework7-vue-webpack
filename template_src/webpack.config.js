@@ -41,7 +41,8 @@ let config = function (env) {
         {test: /\.(png|jpe?g|gif)$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
         {test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
         {test: /\.svg$/, loader: 'url-loader'},
-        {test: /\.s[ca]ss$/, loader: ['style-loader', 'css-loader', 'sass-loader']},
+        {test: /\.scss$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']},
+        {test: /\.sass$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']},
         {test: /\.vue$/, loader: 'vue-loader'}
       ]
     },

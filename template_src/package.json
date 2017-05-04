@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "cheerio": "^0.22.0",
+    "chokidar": "^1.6.1",
     "clean-webpack-plugin": "^0.1.15",
     "css-loader": "^0.27.3",
     "device.js": "git+https://github.com/matthewhudson/device.js.git",
@@ -31,6 +32,7 @@
     "vue-hot-reload-api": "^2.0.11",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^11.1.4",
+    "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.2.4",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1"

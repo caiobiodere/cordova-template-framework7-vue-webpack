@@ -1,3 +1,7 @@
+## 04.05.2017 - 1.1.2
+* Added support for scss to one page component.
+* Chokidar dependency added to template's package.json.
+
 ## 25.04.2017 - 1.1.1
 * Added whitespace support to command paths. You can use folder names with whitespace now.
 
