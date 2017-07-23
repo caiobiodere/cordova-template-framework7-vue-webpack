@@ -1,3 +1,6 @@
+## 23.07.2017 - 1.2.0
+* Updated dependencies.
+
 ## 10.05.2017 - 1.1.3
 * Changed uglify-js dependency version.
 * Removed source-map-loader dependency.
