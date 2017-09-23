@@ -21,6 +21,9 @@
 
 ![template logo](logo.png "template logo")
 
+# IMPORTANT!
+# I can't maintain the template currently. If someone wanted to continue the theme, you can contact me via the centrual@outlook.com.
+
 # Framework7 - Vue - Webpack Cordova Template
 You can start your new cordova project perfectly with this template.
 
