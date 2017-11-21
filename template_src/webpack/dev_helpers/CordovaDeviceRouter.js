@@ -1,4 +1,4 @@
-const deviceJs = require("device.js")
+const deviceJs = require('current-device').default
 
 function bodyPrepend(platform) {
 	let body = document.querySelector("body"),

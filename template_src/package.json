@@ -14,7 +14,7 @@
     "chokidar": "^1.6.1",
     "clean-webpack-plugin": "^0.1.15",
     "css-loader": "^0.28.4",
-    "device.js": "git+https://github.com/matthewhudson/device.js.git",
+    "current-device": "^0.6.0",
     "epipebomb": "^1.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
