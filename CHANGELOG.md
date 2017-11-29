@@ -1,3 +1,7 @@
+## 29.11.2017 - 1.2.0
+* Updated dependencies.
+* Fixed device.js related errors.
+
 ## 23.07.2017 - 1.2.0
 * Updated dependencies.
 
