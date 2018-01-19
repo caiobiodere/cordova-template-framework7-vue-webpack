@@ -1,3 +1,9 @@
+## 19.01.2018 - 2.0.0
+* Added new framework7 (2.x.x) version from https://framework7.io/.
+* Added new framework7-vue (2.x.x) version from https://github.com/framework7io/framework7-vue.
+* Added new library fontawesome from http://fontawesome.io/.
+* Fixed templates inside static folder.
+
 ## 29.11.2017 - 1.2.1
 * Updated dependencies.
 * Fixed device.js related errors.

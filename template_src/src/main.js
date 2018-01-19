@@ -1,45 +1,49 @@
 // Import Vue
 import Vue from 'vue'
 
-// Import F7
-import Framework7 from 'framework7'
+// Import Framework7
+import Framework7 from 'framework7/dist/framework7.esm.bundle.js';
 
-// Import F7 Vue Plugin
-import Framework7Vue from 'framework7-vue'
+// Import Framework7 Vue
+import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle.js';
+
+// Import F7 Style
+import Framework7CSS from 'framework7/dist/css/framework7.css'
 
 // Import F7 iOS Theme Styles
 import Framework7Theme from 'framework7/dist/css/framework7.ios.min.css'
-import Framework7ThemeColors from 'framework7/dist/css/framework7.ios.colors.min.css'
-/* OR for Material Theme:
- import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
- import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
- */
+
+// Import Fontawesome Theme Styles
+import FontAwesome from 'font-awesome/css/font-awesome.css'
 
 // Import App Custom Styles
-import AppStyles from './assets/sass/main.scss'
-
-// Import Routes
-import Routes from './routes.js'
+// import AppStyles from './assets/sass/main.scss'
 
 // Import App Component
-import App from './main.vue'
+import app from './main.vue'
 
-// Init F7 Vue Plugin
-Vue.use(Framework7Vue)
+// Import Routes
+import routes from './routes.js'
 
-// Init App
-new Vue({
+// Install Plugin
+Vue.use(Framework7Vue, Framework7);
+
+let theme = 'auto';
+if (document.location.search.indexOf('theme=') >= 0) {
+  theme = document.location.search.split('theme=')[1].split('&')[0];
+}
+
+// Init Vue App
+export default new Vue({
+  // Root Element
   el: '#app',
-  template: '<app/>',
-  // Init Framework7 by passing parameters here
-  framework7: {
-    root: '#app',
-    /* Uncomment to enable Material theme: */
-    // material: true,
-    routes: Routes
-  },
-  // Register App Component
+  render: c => c('app'),
   components: {
-    app: App
-  }
-})
+    app,
+  },
+  framework7: {
+    id: 'io.framework7.testapp',
+    theme, // md or ios
+  },
+  routes,
+});
