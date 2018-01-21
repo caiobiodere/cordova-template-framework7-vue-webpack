@@ -128,9 +128,6 @@ module.exports = function (ctx) {
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
 			sys.cleanWww()
       
-      sys.deleteFolderRecursive(targetStaticFolder, true)
-      sys.copyRecursiveSync(staticFolder, targetStaticFolder)
-      
 			defer.resolve()
 			
 			return defer.promise
@@ -186,6 +183,9 @@ module.exports = function (ctx) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
 				}
+
+				sys.deleteFolderRecursive(targetStaticFolder, true)
+      			sys.copyRecursiveSync(staticFolder, targetStaticFolder)
 				
 				sys.checkManifestFile()
 				
