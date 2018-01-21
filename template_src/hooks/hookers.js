@@ -29,7 +29,7 @@ module.exports = function (ctx) {
           if( ifaces[key].hasOwnProperty(ipInfoKey) ) {
             let ipInfo = ifaces[key][ipInfoKey]
   
-            if (ipInfo.family === 'IPv4' && ipInfo.address.indexOf('192.168.') === 0 && !ipInfo.internal)
+            if (ipInfo.family === 'IPv4' && !ipInfo.internal)
               return ipInfo.address
           }
         }
