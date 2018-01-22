@@ -23,4 +23,8 @@ export default [
     path: '/color-themes/',
     component: require('./assets/vue/pages/color-themes.vue')
   },
+  {
+    path: '/chat/',
+    component: require('./assets/vue/pages/chat.vue')
+  },
 ]
