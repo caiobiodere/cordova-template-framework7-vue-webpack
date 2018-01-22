@@ -29,7 +29,7 @@ module.exports = function (ctx) {
           if( ifaces[key].hasOwnProperty(ipInfoKey) ) {
             let ipInfo = ifaces[key][ipInfoKey]
   
-            if (ipInfo.family === 'IPv4' && ipInfo.address.indexOf('192.168.') === 0 && !ipInfo.internal)
+            if (ipInfo.family === 'IPv4' && !ipInfo.internal)
               return ipInfo.address
           }
         }
@@ -128,9 +128,6 @@ module.exports = function (ctx) {
 			fs.writeFileSync(configFile, conf.html(), 'utf-8')
 			sys.cleanWww()
       
-      sys.deleteFolderRecursive(targetStaticFolder, true)
-      sys.copyRecursiveSync(staticFolder, targetStaticFolder)
-      
 			defer.resolve()
 			
 			return defer.promise
@@ -186,6 +183,9 @@ module.exports = function (ctx) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
 				}
+
+				sys.deleteFolderRecursive(targetStaticFolder, true)
+      			sys.copyRecursiveSync(staticFolder, targetStaticFolder)
 				
 				sys.checkManifestFile()
 				
