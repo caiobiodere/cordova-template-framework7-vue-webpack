@@ -10,8 +10,8 @@ import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle.js';
 // Import F7 Style
 import Framework7CSS from 'framework7/dist/css/framework7.css'
 
-// Import F7 iOS Theme Styles
-import Framework7Theme from 'framework7/dist/css/framework7.ios.min.css'
+// Import F7 iOS Icons
+import Framework7Icons from 'framework7-icons/css/framework7-icons.css'
 
 // Import Fontawesome Theme Styles
 import FontAwesome from 'font-awesome/css/font-awesome.css'
