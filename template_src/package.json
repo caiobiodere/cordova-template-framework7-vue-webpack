@@ -37,6 +37,9 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "framework7": "^2.0.6",
     "framework7-vue": "^2.0.0",
     "framework7-icons": "^0.9.0",
