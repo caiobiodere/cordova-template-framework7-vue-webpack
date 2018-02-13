@@ -10,6 +10,7 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
     "cheerio": "^1.0.0-rc.2",
     "chokidar": "^1.6.1",
     "clean-webpack-plugin": "^0.1.15",
