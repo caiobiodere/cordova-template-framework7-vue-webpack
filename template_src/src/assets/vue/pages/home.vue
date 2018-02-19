@@ -28,6 +28,9 @@
             <f7-list-item link="/chat/" title="Chat" panel-close>
                 <f7-icon slot="media" icon="fa fa-user fa-fw"></f7-icon>
             </f7-list-item>
+            <f7-list-item link="/vuex/" title="Vuex" panel-close>
+                <f7-icon slot="media" icon="fa fa-battery fa-fw"></f7-icon>
+            </f7-list-item>
         </f7-list>
         <f7-list class="searchbar-not-found">
             <f7-list-item title="Nothing found"></f7-list-item>

@@ -27,4 +27,8 @@ export default [
     path: '/chat/',
     component: require('./assets/vue/pages/chat.vue')
   },
+  {
+    path: '/vuex/',
+    component: require('./assets/vue/pages/vuex.vue')
+  },
 ]

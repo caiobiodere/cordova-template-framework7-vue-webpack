@@ -42,8 +42,8 @@ let config = function (env) {
         {test: /\.svg$/, loader: 'url-loader'},
         {test: /\.scss$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']},
         {test: /\.sass$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']},
-        {test: /\.vue$/, loader: 'vue-loader', options: {loaders: {js: {loader: 'babel-loader', options: {presets: ['env']}}}}},
-        {test: /\.js$/, exclude: /node_modules\/(?!(framework7|framework7-vue|template7|dom7)\/).*/, use: {loader: 'babel-loader', options: {presets: ['env'], plugins: [ 'transform-runtime' ]}}}
+        {test: /\.vue$/, loader: 'vue-loader', options: {loaders: {js: {loader: 'babel-loader', options: {presets: ['env'], plugins: ['transform-object-rest-spread']}}}}},
+        {test: /\.js$/, exclude: /node_modules\/(?!(framework7|framework7-vue|template7|dom7)\/).*/, use: {loader: 'babel-loader', options: {presets: ['env'], plugins: [ 'transform-runtime', 'transform-object-rest-spread' ]}}}
       ]
     },
     

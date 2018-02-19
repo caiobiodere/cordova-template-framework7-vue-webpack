@@ -25,6 +25,9 @@ import app from './main.vue'
 // Import Routes
 import routes from './routes.js'
 
+// Import Vuex Storage
+import store from './assets/vuex/storage.js'
+
 // Install Plugin
 Vue.use(Framework7Vue, Framework7);
 
@@ -37,6 +40,7 @@ if (document.location.search.indexOf('theme=') >= 0) {
 export default new Vue({
   // Root Element
   el: '#app',
+  store,
   render: c => c('app'),
   components: {
     app,
