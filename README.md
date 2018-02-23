@@ -27,9 +27,11 @@ You can start your new cordova project perfectly with this template.
 This template uses:
 * [Framework7 2](https://framework7.io)
 * [Vue Js 2](https://vuejs.org/)
+* [Vuex](https://github.com/vuejs/vuex)
 * [Webpack 2](https://webpack.github.io/)
 * [Cordova](https://cordova.apache.org/)
 * [FontAwesome](http://fontawesome.io/)
+* [Babel Loader 7](https://github.com/babel/babel-loader)
 
 
 ## Minimum Requirements
@@ -70,8 +72,8 @@ This template need cordova or phonegap, for more information [cordova installati
 Our Magic words:
 
 ``` bash
-cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
-phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
+cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack
+phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack
 ```
 
 boom! :boom: you have your brand new cordova / phonegap project with framework7 - vue 2 and webpack 2!

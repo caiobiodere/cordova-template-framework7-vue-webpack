@@ -18,6 +18,7 @@
  under the License.
  -->
 <widget id="com.example.template" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="android-minSdkVersion" value="16" />
     <hook src="hooks/hookers.js" type="before_prepare"/>
     <hook src="hooks/beforedep.js" type="before_deploy"/>
     <name>Cordova - Framework7 - Vue - Webpack Template</name>
@@ -40,6 +41,7 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <splash src="res/screen/ios/Default@2x~universal~anyany.png" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
