@@ -72,8 +72,8 @@ This template need cordova or phonegap, for more information [cordova installati
 Our Magic words:
 
 ``` bash
-cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack
-phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack
+cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
+phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
 ```
 
 boom! :boom: you have your brand new cordova / phonegap project with framework7 - vue 2 and webpack 2!
