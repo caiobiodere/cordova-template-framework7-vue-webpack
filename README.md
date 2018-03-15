@@ -96,6 +96,13 @@ phonegap run ios -- --lr
 
 And :tada: that's all folks!
 
+---
+
+## Using Cordova-Simulate from microsoft
+
+We can use Microsoft Cordova-Simulate using:
+* [Cordova-Simulate Plugin](https://marketplace.visualstudio.com/items?itemName=vsmobile.cordova-tools)
+
 You can check:
 * [hookers.js](template_src/hooks/hookers.js),
 * [beforedep.js](template_src/hooks/beforedep.js),
