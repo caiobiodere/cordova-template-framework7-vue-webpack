@@ -98,7 +98,8 @@ let config = function (env) {
         stats: {colors: true},
         watchOptions: {
           aggregateTimeout: 300,
-          poll: 1000
+          poll: 100,
+          ignored: /node_modules|platforms/,
         },
         headers: {
           "Access-Control-Allow-Origin": "*"
