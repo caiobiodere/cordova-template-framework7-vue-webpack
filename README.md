@@ -25,7 +25,7 @@
 You can start your new cordova project perfectly with this template.
 
 This template uses:
-* [Framework7 2](https://framework7.io)
+* [Framework7 3](https://framework7.io)
 * [Vue Js 2](https://vuejs.org/)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Webpack 2](https://webpack.github.io/)
