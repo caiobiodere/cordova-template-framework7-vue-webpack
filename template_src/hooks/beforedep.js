@@ -11,7 +11,7 @@ module.exports = function (ctx) {
 		getPlatformDir(platform, cordovaFile) {
 			
 			if( platform === 'android')
-				return path.resolve(__dirname, `../platforms/${platform}/assets/www/${cordovaFile ? "cordova.js" : ""}`)
+				return path.resolve(__dirname, `../platforms/${platform}/platform_www/${cordovaFile ? "cordova.js" : ""}`)
 			else
 				return path.resolve(__dirname, `../platforms/${platform}/www/${cordovaFile ? "cordova.js" : ""}`)
 		},
