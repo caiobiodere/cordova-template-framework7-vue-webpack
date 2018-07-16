@@ -268,12 +268,14 @@
             self.responseInProgress = false;
           }, 4000);
         }, 1000);
-      },
-      onF7Ready() {
+      }
+    },
+    mounted() {
+      this.$f7ready((f7) => {
         const self = this;
         self.messagebar = self.$refs.messagebar.f7Messagebar;
         self.messages = self.$refs.messages.f7Messages;
-      },
-    },
+      })
+    }
   };
 </script>
