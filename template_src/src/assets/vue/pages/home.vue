@@ -17,7 +17,7 @@
         <f7-block-title class="searchbar-found">Links</f7-block-title>
         <f7-list class="components-list searchbar-found">
             <f7-list-item link="/about/" title="About" panel-close>
-                <f7-icon slot="media" icon="fa fa-info fa-fw"></f7-icon>
+                <f7-icon slot="media" ios="f7:info" md="material:info"></f7-icon>
             </f7-list-item>
             <f7-list-item link="/form/" title="Form" panel-close>
                 <f7-icon slot="media" icon="fa fa-vcard-o fa-fw"></f7-icon>

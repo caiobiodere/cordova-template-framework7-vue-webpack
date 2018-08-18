@@ -13,6 +13,9 @@ import Framework7CSS from 'framework7/css/framework7.css'
 // Import F7 iOS Icons
 import Framework7Icons from 'framework7-icons/css/framework7-icons.css'
 
+// Import Material Icons
+import MaterialIcons from 'material-design-icons/iconfont/material-icons.css'
+
 // Import Fontawesome Theme Styles
 import FontAwesome from 'font-awesome/css/font-awesome.css'
 
