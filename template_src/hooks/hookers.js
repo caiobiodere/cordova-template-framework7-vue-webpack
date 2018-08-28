@@ -306,12 +306,16 @@ module.exports = function (ctx) {
         })
       } else
         fs.linkSync(src, dest)
-    },
+		},
+		
+		createFile(p) {
+			let rel = path.relative('./src/static/', p)
+			sys.copyFile(p, path.resolve(targetStaticFolder, rel));
+			console.log(`${p} created`)
+		},
     
     addUpdate(p) {
-      let rel = path.relative('./src/static/', p)
-      sys.copyFile(p, path.resolve(targetStaticFolder, rel))
-      
+			let rel = path.relative('./src/static/', p)
       console.log(`${p} copied to ${path.resolve(targetStaticFolder, rel)}`)
     },
     
@@ -344,7 +348,8 @@ module.exports = function (ctx) {
       
       let wr = fs.createWriteStream(target)
       wr.on("error", done)
-      wr.on("close", done)
+			wr.on("close", done)
+			
       rd.pipe(wr)
       
       function done(err) {
@@ -367,7 +372,7 @@ module.exports = function (ctx) {
         watcher.on('ready', () => {
           console.log('Watcher ready!')
           watcher
-          .on('add', sys.addUpdate)
+          .on('add', sys.createFile)
           .on('change', sys.addUpdate)
           .on('unlink', sys.delete)
           .on('addDir', sys.addDir)
