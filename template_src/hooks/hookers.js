@@ -178,11 +178,13 @@ module.exports = function (ctx) {
 			
       let wpPath = webpackPath + (os.platform() === 'win32' ? '.cmd' : '')
       
-			exec(`"${wpPath}"` + (isRelease ? ' --env.release' : ''), {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error) => {
+			exec(`"${wpPath}"` + (isRelease ? ' --env.release' : ''), {cwd: pRoot, maxBuffer: 1024 * 1024 * 5}, (error, log) => {
 				if (error) {
 					console.error(`Error happened when webpack build: ${error}`);
 					defer.reject(new Error(`Error happened when webpack build: ${error}`))
 				}
+
+				console.log(`Webpack log: ${log}`);
 
 				sys.deleteFolderRecursive(targetStaticFolder, true)
       			sys.copyRecursiveSync(staticFolder, targetStaticFolder)
