@@ -26,12 +26,6 @@ export default {
                 id: 'io.framework7.testapp',
             }
         }
-    },
-    mounted() {
-      let vm = this;
-      document.addEventListener('backbutton', () => {
-        vm.$f7.views.current.router.back()
-      }, false)
     }
 }
 </script>

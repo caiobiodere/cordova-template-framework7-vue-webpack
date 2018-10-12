@@ -4,7 +4,7 @@ function CordovaHtmlOutputPlugin() {}
 
 CordovaHtmlOutputPlugin.prototype.apply = function (compiler) {
 	compiler.plugin('compilation', (compilation) => {
-		compilation.plugin('html-webpack-plugin-before-html-processing', function (htmlPluginData, callback) {
+		compilation.plugin('html-webpack-plugin-before-html-processing', function (htmlPluginData) {
 			let $ = cheerio.load(htmlPluginData.html),
 				cordovaJsFound = false;
 
@@ -17,8 +17,6 @@ CordovaHtmlOutputPlugin.prototype.apply = function (compiler) {
 				$("body").prepend('<script src="cordova.js"></script>');
 
 			htmlPluginData.html = $.html();
-			callback(null, htmlPluginData);
-
 		})
 	})
 };

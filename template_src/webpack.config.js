@@ -1,19 +1,21 @@
-const path = require('path'),
-  fs = require('fs'),
+const path = require('path');
+const fs = require('fs');
   
-  webpack = require('webpack'),
-  HtmlWebpackPlugin = require('html-webpack-plugin'),
-  CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js'),
-  UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
-  CleanPlugin = require('clean-webpack-plugin'),
-  ExtractTextPlugin = require("extract-text-webpack-plugin"),
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CleanPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
   
-  entryFile = path.join(__dirname, 'src/main.js'),
-  devServerPort = 8081
+const entryFile = path.join(__dirname, 'src/main.js');
+const devServerPort = 8081;
 
 let config = function (env) {
   let returner = {
     entry: entryFile,
+    mode: (env && typeof env.release !== 'undefined' && env.release) ? "production" : "development",
     
     resolve: {
       extensions: ['.js', '.json', '.vue'],
@@ -37,13 +39,55 @@ let config = function (env) {
     
     module: {
       rules: [
-        {test: /\.(png|jpe?g|gif)$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-        {test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
-        {test: /\.svg$/, loader: 'url-loader'},
-        {test: /\.scss$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']},
-        {test: /\.sass$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']},
-        {test: /\.vue$/, exclude: /node_modules/, loader: 'vue-loader', options: {loaders: {js: {loader: 'babel-loader', options: {presets: ['env'], plugins: ['transform-object-rest-spread']}}}}},
-        {test: /\.js$/, exclude: /node_modules(\/|\\)(?!(framework7|framework7-vue|template7|dom7)(\/|\\)).*/, use: {loader: 'babel-loader', options: {presets: ['env'], plugins: [ 'transform-runtime', 'transform-object-rest-spread' ]}}}
+        {
+          test: /\.(png|jpe?g|gif)$/, 
+          loader: 'file-loader', 
+          options: {name: '[name].[ext]?[hash]'}
+        },
+        {
+          test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/, 
+          loader: 'file-loader', 
+          options: {name: '[name].[ext]?[hash]'}
+        },
+        {
+          test: /\.svg$/, 
+          loader: 'url-loader'
+        },
+        {
+          test: /\.scss$/, 
+          loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']
+        },
+        {
+          test: /\.sass$/, 
+          loader: [ 'vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
+        },
+        {
+          test: /\.vue$/, 
+          exclude: /node_modules/, 
+          loader: 'vue-loader', 
+          options: {
+            loaders: {
+              js: {
+                loader: 'babel-loader', 
+                options: {
+                  presets: ['env'], 
+                  plugins: ['transform-object-rest-spread']
+                }
+              }
+            }
+          }
+        },
+        {
+          test: /\.js$/, 
+          exclude: /node_modules(\/|\\)(?!(framework7|framework7-vue|template7|dom7)(\/|\\)).*/, 
+          use: {
+            loader: 'babel-loader', 
+            options: {
+              presets: ['env'], 
+              plugins: [ 'transform-runtime', 'transform-object-rest-spread' ]
+            }
+          }
+        }
       ]
     },
     
@@ -66,7 +110,8 @@ let config = function (env) {
           collapseWhitespace: true,
           minifyCSS: true
         }
-      })
+      }),
+      new VueLoaderPlugin()
     ]
   }
   
