@@ -28,7 +28,7 @@ This template uses:
 * [Framework7 3](https://framework7.io)
 * [Vue Js 2](https://vuejs.org/)
 * [Vuex](https://github.com/vuejs/vuex)
-* [Webpack 2](https://webpack.github.io/)
+* [Webpack 4](https://webpack.github.io/)
 * [Cordova](https://cordova.apache.org/)
 * [FontAwesome](http://fontawesome.io/)
 * [Babel Loader 7](https://github.com/babel/babel-loader)
