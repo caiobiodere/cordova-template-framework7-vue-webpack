@@ -76,7 +76,7 @@ cordova create <project_create_dir> [com.example.projectname] [ProjectClassName]
 phonegap create <project_create_dir> [com.example.projectname] [ProjectClassName] --template cordova-template-framework7-vue-webpack
 ```
 
-boom! :boom: you have your brand new cordova / phonegap project with framework7 - vue 2 and webpack 2!
+boom! :boom: you have your brand new cordova / phonegap project with framework7 - vue 2 and webpack 4!
 
 ![such a wow!](https://cloud.githubusercontent.com/assets/296796/3511506/4042665c-06b0-11e4-953c-4f14c11f81ec.png "such a wow!")
 
