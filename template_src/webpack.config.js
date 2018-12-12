@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-  
+
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js');
@@ -8,7 +8,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-  
+
 const entryFile = path.join(__dirname, 'src/main.js');
 const devServerPort = 8081;
 
@@ -16,7 +16,7 @@ let config = function (env) {
   let returner = {
     entry: entryFile,
     mode: (env && typeof env.release !== 'undefined' && env.release) ? "production" : "development",
-    
+
     resolve: {
       extensions: ['.js', '.json', '.vue'],
       modules: [path.join(__dirname, 'src'), 'node_modules'],
@@ -28,7 +28,7 @@ let config = function (env) {
         'components': path.resolve(__dirname, 'src/assets/vue/components/')
       }
     },
-    
+
     output: {
       pathinfo: true,
       devtoolLineToLine: true,
@@ -36,41 +36,41 @@ let config = function (env) {
       sourceMapFilename: "[hash].[name].js.map",
       path: path.join(__dirname, 'www')
     },
-    
+
     module: {
       rules: [
         {
-          test: /\.(png|jpe?g|gif)$/, 
-          loader: 'file-loader', 
-          options: {name: '[name].[ext]?[hash]'}
+          test: /\.(png|jpe?g|gif)$/,
+          loader: 'file-loader',
+          options: { name: '[name].[ext]?[hash]' }
         },
         {
-          test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/, 
-          loader: 'file-loader', 
-          options: {name: '[name].[ext]?[hash]'}
+          test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/,
+          loader: 'file-loader',
+          options: { name: '[name].[ext]?[hash]' }
         },
         {
-          test: /\.svg$/, 
+          test: /\.svg$/,
           loader: 'url-loader'
         },
         {
-          test: /\.scss$/, 
-          loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']
+          test: /\.scss$/,
+          loader: ['vue-style-loader', 'css-loader', 'sass-loader']
         },
         {
-          test: /\.sass$/, 
-          loader: [ 'vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
+          test: /\.sass$/,
+          loader: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
         },
         {
-          test: /\.vue$/, 
-          exclude: /node_modules/, 
-          loader: 'vue-loader', 
+          test: /\.vue$/,
+          exclude: /node_modules/,
+          loader: 'vue-loader',
           options: {
             loaders: {
               js: {
-                loader: 'babel-loader', 
+                loader: 'babel-loader',
                 options: {
-                  presets: ['env'], 
+                  presets: ['env'],
                   plugins: ['transform-object-rest-spread']
                 }
               }
@@ -78,19 +78,19 @@ let config = function (env) {
           }
         },
         {
-          test: /\.js$/, 
-          exclude: /node_modules(\/|\\)(?!(framework7|framework7-vue|template7|dom7)(\/|\\)).*/, 
+          test: /\.js$/,
+          exclude: /node_modules(\/|\\)(?!(framework7|framework7-vue|template7|dom7)(\/|\\)).*/,
           use: {
-            loader: 'babel-loader', 
+            loader: 'babel-loader',
             options: {
-              presets: ['env'], 
-              plugins: [ 'transform-runtime', 'transform-object-rest-spread' ]
+              presets: ['env'],
+              plugins: ['transform-runtime', 'transform-object-rest-spread']
             }
           }
         }
       ]
     },
-    
+
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
@@ -99,7 +99,8 @@ let config = function (env) {
       }),
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: 'src/index.html',
+        template: 'src/index.ejs',
+        platform: process.argv[5].replace(/[- ]/g, ''),
         inject: true,
         minify: {
           removeComments: true,
@@ -114,7 +115,7 @@ let config = function (env) {
       new VueLoaderPlugin()
     ]
   }
-  
+
   if (typeof env === 'undefined' || typeof env.devserver === 'undefined') {
     returner.plugins.push(new CordovaHtmlOutputPlugin())
     returner.plugins.push(new ExtractTextPlugin("styles.css"))
@@ -125,7 +126,7 @@ let config = function (env) {
       })
     })
   }
-  
+
   if (env) {
     if (typeof env.devserver !== 'undefined' && env.devserver) {
       returner.module.rules.push({
@@ -133,14 +134,13 @@ let config = function (env) {
       })
       returner.entry = [
         entryFile,
-        path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")
       ]
       returner.output.publicPath = "/"
       returner.devtool = "eval"
       returner.devServer = {
         contentBase: path.join(__dirname, "www"),
         port: devServerPort,
-        stats: {colors: true},
+        stats: { colors: true },
         watchOptions: {
           aggregateTimeout: 300,
           poll: 100,
@@ -162,7 +162,7 @@ let config = function (env) {
       returner.plugins.push(new UglifyJsPlugin())
     }
   }
-  
+
   return returner
 }
 

@@ -11,5 +11,9 @@
 <body>
 <div id="app"></div>
 <!-- built script files will be auto injected -->
+<% if (htmlWebpackPlugin.options.platform) { %>
+	<script type="text/javascript"
+	 src="platform_cordova_files/<%= htmlWebpackPlugin.options.platform %>/cordova.js"></script>
+	<% } %>
 </body>
 </html>
