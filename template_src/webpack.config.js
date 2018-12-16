@@ -100,7 +100,7 @@ let config = function (env) {
       new HtmlWebpackPlugin({
         filename: 'index.html',
         template: 'src/index.ejs',
-        platform: process.argv[5].replace(/[- ]/g, ''),
+        platform: process.argv.length > 5 ? process.argv[5].replace(/[- ]/g, '') : "",
         inject: true,
         minify: {
           removeComments: true,
