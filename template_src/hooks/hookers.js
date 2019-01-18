@@ -202,11 +202,11 @@ module.exports = function (ctx) {
 			let defer = new Q.defer(),
 				outText = '',
 				isResultFound = false,
-				args = [`"${webpackDevServerPath}"`, '--hot', '--inline', '--env.devserver', '--' + platform, `--public ${getRouterIpAddr()}:8081`],
+				args = [`"${webpackDevServerPath}"`, '--hot', '--inline', '--env.devserver', '--' + platform, `--public ${getRouterIpAddr()}:8081`, '--env.devserver'],
 				run = epipeBombPath
 
 			if (os.platform() === 'win32') {
-				args = ['--hot', '--inline', '--env.devserver', '--' + platform, `--public ${getRouterIpAddr()}:8081`]
+				args = ['--hot', '--inline', '--env.devserver', '--' + platform, `--public ${getRouterIpAddr()}:8081`, '--env.devserver']
 				run = `"${webpackDevServerPath}.cmd"`
 			}
 
