@@ -9,6 +9,11 @@
       "buildFlag": [
         "-UseModernBuildSystem=0"
       ]
+    },
+    "debug": {
+      "buildFlag": [
+        "-UseModernBuildSystem=0"
+      ]
     }
   }
 }
