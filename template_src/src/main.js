@@ -8,7 +8,7 @@ import Framework7 from 'framework7/framework7.esm.bundle.js';
 import Framework7Vue from 'framework7-vue/framework7-vue.esm.bundle.js';
 
 // Import F7 Style
-import Framework7CSS from 'framework7/css/framework7.css'
+import Framework7CSS from 'framework7/css/framework7.bundle.css'
 
 // Import F7 iOS Icons
 import Framework7Icons from 'framework7-icons/css/framework7-icons.css'
