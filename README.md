@@ -80,6 +80,38 @@ boom! :boom: you have your brand new cordova / phonegap project with framework7 
 
 ![such a wow!](https://cloud.githubusercontent.com/assets/296796/3511506/4042665c-06b0-11e4-953c-4f14c11f81ec.png "such a wow!")
 
+## Installation using pre-defined templates
+
+Framework v4 version
+
+``` bash
+cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack#v4-default-template
+```
+
+[Framework Single View v4 version](https://github.com/framework7io/framework7-template-single-view)
+
+``` bash
+Still working
+```
+
+[Framework Tabbed Views v4 version](https://github.com/framework7io/framework7-template-tabs)
+
+``` bash
+Still working
+```
+
+[Framework Split View v4 version](https://github.com/framework7io/framework7-template-split-view)
+
+``` bash
+Still working
+```
+
+Framework v3 version
+
+``` bash
+cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack#v3-default-template
+```
+
 ---
 
 ## Usage
