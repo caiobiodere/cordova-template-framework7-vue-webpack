@@ -85,7 +85,7 @@ boom! :boom: you have your brand new cordova / phonegap project with framework7 
 Framework v4 version
 
 ``` bash
-cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack#v4-default-template
+cordova create cordova-template com.template DefaultTemplate --template git://github.com/caiobiodere/cordova-template-framework7-vue-webpack.git#master
 ```
 
 [Framework Single View v4 version](https://github.com/framework7io/framework7-template-single-view)
@@ -109,7 +109,7 @@ Still working
 Framework v3 version
 
 ``` bash
-cordova create <project_create_dir> [com.example.projectname] [ProjectClassName] --template https://github.com/caiobiodere/cordova-template-framework7-vue-webpack#v3-default-template
+cordova create cordova-template com.template DefaultTemplate --template git://github.com/caiobiodere/cordova-template-framework7-vue-webpack.git#feature/v3-default-template
 ```
 
 ---
