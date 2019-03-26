@@ -1,7 +1,7 @@
 module.exports = function (ctx) {
-	const Q = ctx.requireCordovaModule('q'),
-		path = ctx.requireCordovaModule('path'),
-		fs = ctx.requireCordovaModule('fs'),
+	const Q = require('q'),
+		path = require('path'),
+		fs = require('fs'),
 		pRoot = ctx.opts.projectRoot,
 		
 		wwwFolder = path.resolve(pRoot, "www/"),
