@@ -16,6 +16,15 @@
   </f7-page>
 </template>
 <script>
+  import { f7Page, f7Block, f7BlockTitle, f7List, f7ListItem, f7Link } from "framework7-vue";
   export default {
+    components: {
+      f7Page, 
+      f7Block, 
+      f7BlockTitle, 
+      f7List, 
+      f7ListItem,
+      f7Link
+    }
   };
 </script>

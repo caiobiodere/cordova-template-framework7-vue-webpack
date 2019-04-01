@@ -2,7 +2,7 @@
     <f7-page>
         <f7-navbar>
             <f7-nav-left>
-                <f7-link class="panel-open" panel-open="left" icon="fa fa-bars"></f7-link>
+                <f7-link class="panel-open" open-panel="left" icon="fa fa-bars"></f7-link>
             </f7-nav-left>
             <div class="title">Framework7-Vue</div>
             <f7-nav-right>
@@ -45,6 +45,22 @@
     </f7-page>
 </template>
 <script>
-export default {};
-
+  import { f7Page, f7Block, f7Navbar, f7NavLeft, f7NavTitle, f7NavTitleLarge, f7NavRight, f7BlockTitle, f7List, f7ListItem, f7Link, f7Searchbar, f7Icon } from 'framework7-vue';
+  export default {
+    components: {
+      f7Page,
+      f7Navbar,
+      f7NavLeft,
+      f7NavTitle,
+      f7NavTitleLarge,
+      f7NavRight,
+      f7BlockTitle,
+      f7List,
+      f7ListItem,
+      f7Link,
+      f7Searchbar,
+      f7Icon,
+      f7Block
+    },
+  };
 </script>

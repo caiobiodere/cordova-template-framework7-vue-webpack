@@ -15,8 +15,18 @@
 </template>
 <script>
 	import { mapState, mapActions } from 'vuex'
+	import { f7Page, f7Navbar, f7BlockTitle, f7List, f7ListGroup, f7ListItem, f7ListButton } from "framework7-vue";
 
   export default {
+		components: {
+			f7Page, 
+			f7Navbar, 
+			f7BlockTitle, 
+			f7List, 
+			f7ListGroup, 
+			f7ListItem, 
+			f7ListButton
+		},
   	computed: {
         ...mapState({
             user: state => state.user
