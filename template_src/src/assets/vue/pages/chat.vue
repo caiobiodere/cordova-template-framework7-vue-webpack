@@ -5,18 +5,22 @@
     <f7-messagebar
       :placeholder="placeholder"
       ref="messagebar"
-      :attachmentsVisible="attachmentsVisible"
-      :sheetVisible="sheetVisible"
+      :attachments-visible="attachmentsVisible"
+      :sheet-visible="sheetVisible"
+      :value="messageText"
+      @input="messageText = $event.target.value"
     >
       <f7-link
-        icon-if-ios="f7:camera_fill"
-        icon-if-md="f7:camera_alt"
+        icon-ios="f7:camera_fill"
+        icon-aurora="f7:camera_fill"
+        icon-md="material:camera_alt"
         slot="inner-start"
-        @click="sheetToggle"
+        @click="sheetVisible = !sheetVisible"
       ></f7-link>
       <f7-link
-        icon-if-ios="f7:arrow_up_fill"
-        icon-if-md="material:send"
+        icon-ios="f7:arrow_up_round_fill"
+        icon-aurora="f7:arrow_up_round_fill"
+        icon-md="material:send"
         slot="inner-end"
         @click="sendMessage"
       ></f7-link>
@@ -45,23 +49,50 @@
         v-for="(message, index) in messagesData"
         :key="index"
         :type="message.type"
-        :text="message.text"
         :image="message.image"
         :name="message.name"
         :avatar="message.avatar"
         :first="isFirstMessage(message, index)"
         :last="isLastMessage(message, index)"
         :tail="isTailMessage(message, index)"
+      >
+        <span slot="text" v-if="message.text" v-html="message.text"></span>
+      </f7-message>
+      <f7-message v-if="typingMessage"
+        type="received"
+        :typing="true"
+        :first="true"
+        :last="true"
+        :tail="true"
+        :header="`${typingMessage.name} is typing`"
+        :avatar="typingMessage.avatar"
       ></f7-message>
     </f7-messages>
   </f7-page>
 </template>
 <script>
+  import { f7Navbar, f7Page, f7Messages, f7MessagesTitle, f7Message, f7Messagebar, f7Link, f7MessagebarAttachments, f7MessagebarAttachment, f7MessagebarSheet, f7MessagebarSheetImage } from 'framework7-vue';
+
   export default {
+    components: {
+      f7Navbar,
+      f7Page,
+      f7Messages,
+      f7MessagesTitle,
+      f7Message,
+      f7Messagebar,
+      f7MessagebarAttachments,
+      f7MessagebarAttachment,
+      f7MessagebarSheet,
+      f7MessagebarSheetImage,
+      f7Link,
+    },
     data() {
       return {
         attachments: [],
         sheetVisible: false,
+        typingMessage: null,
+        messageText: '',
         messagesData: [
           {
             type: 'sent',
@@ -75,13 +106,13 @@
             name: 'Kate',
             type: 'received',
             text: 'Hi, I am good!',
-            avatar: 'http://lorempixel.com/100/100/people/9',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-9.jpg',
           },
           {
             name: 'Blue Ninja',
             type: 'received',
             text: 'Hi there, I am also fine, thanks! And how are you?',
-            avatar: 'http://lorempixel.com/100/100/people/7',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-7.jpg',
           },
           {
             type: 'sent',
@@ -93,48 +124,48 @@
           },
           {
             type: 'sent',
-            image: 'http://lorempixel.com/200/260/cats/4/',
+            image: 'https://cdn.framework7.io/placeholder/cats-200x260-4.jpg',
 
           },
           {
             name: 'Kate',
             type: 'received',
             text: 'Nice!',
-            avatar: 'http://lorempixel.com/100/100/people/9',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-9.jpg',
           },
           {
             name: 'Kate',
             type: 'received',
             text: 'Like it very much!',
-            avatar: 'http://lorempixel.com/100/100/people/9',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-9.jpg',
           },
           {
             name: 'Blue Ninja',
             type: 'received',
             text: 'Awesome!',
-            avatar: 'http://lorempixel.com/100/100/people/7',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-7.jpg',
           },
         ],
         images: [
-          'http://lorempixel.com/300/300/cats/1/',
-          'http://lorempixel.com/200/300/cats/2/',
-          'http://lorempixel.com/400/300/cats/3/',
-          'http://lorempixel.com/300/150/cats/4/',
-          'http://lorempixel.com/150/300/cats/5/',
-          'http://lorempixel.com/300/300/cats/6/',
-          'http://lorempixel.com/300/300/cats/7/',
-          'http://lorempixel.com/200/300/cats/8/',
-          'http://lorempixel.com/400/300/cats/9/',
-          'http://lorempixel.com/300/150/cats/10/',
+          'https://cdn.framework7.io/placeholder/cats-300x300-1.jpg',
+          'https://cdn.framework7.io/placeholder/cats-200x300-2.jpg',
+          'https://cdn.framework7.io/placeholder/cats-400x300-3.jpg',
+          'https://cdn.framework7.io/placeholder/cats-300x150-4.jpg',
+          'https://cdn.framework7.io/placeholder/cats-150x300-5.jpg',
+          'https://cdn.framework7.io/placeholder/cats-300x300-6.jpg',
+          'https://cdn.framework7.io/placeholder/cats-300x300-7.jpg',
+          'https://cdn.framework7.io/placeholder/cats-200x300-8.jpg',
+          'https://cdn.framework7.io/placeholder/cats-400x300-9.jpg',
+          'https://cdn.framework7.io/placeholder/cats-300x150-10.jpg',
         ],
         people: [
           {
             name: 'Kate Johnson',
-            avatar: 'http://lorempixel.com/100/100/people/9',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-9.jpg',
           },
           {
             name: 'Blue Ninja',
-            avatar: 'http://lorempixel.com/100/100/people/7',
+            avatar: 'https://cdn.framework7.io/placeholder/people-100x100-7.jpg',
           },
         ],
         answers: [
@@ -154,21 +185,6 @@
         responseInProgress: false,
       };
     },
-    // Resize page when attachments or sheet become visible
-    watch: {
-      attachmentsVisible() {
-        const self = this;
-        self.$nextTick(() => {
-          self.messagebar.resizePage();
-        });
-      },
-      sheetVisible() {
-        const self = this;
-        self.$nextTick(() => {
-          self.messagebar.resizePage();
-        });
-      },
-    },
     computed: {
       attachmentsVisible() {
         const self = this;
@@ -178,6 +194,13 @@
         const self = this;
         return self.attachments.length > 0 ? 'Add comment or Send' : 'Message';
       },
+    },
+    mounted() {
+      const self = this;
+      self.$f7ready(() => {
+        self.messagebar = self.$refs.messagebar.f7Messagebar;
+        self.messages = self.$refs.messages.f7Messages;
+      });
     },
     methods: {
       isFirstMessage(message, index) {
@@ -201,10 +224,6 @@
         if (!nextMessage || nextMessage.type !== message.type || nextMessage.name !== message.name) return true;
         return false;
       },
-      sheetToggle() {
-        const self = this;
-        self.sheetVisible = !self.sheetVisible;
-      },
       deleteAttachment(image) {
         const self = this;
         const index = self.attachments.indexOf(image);
@@ -224,24 +243,28 @@
       },
       sendMessage() {
         const self = this;
-        const text = self.messagebar.getValue().replace(/\n/g, '<br>').trim();
+        const text = self.messageText.replace(/\n/g, '<br>').trim();
         const messagesToSend = [];
         self.attachments.forEach((attachment) => {
           messagesToSend.push({
             image: attachment,
           });
         });
-        if (text.trim().length) {
+        if (text.length) {
           messagesToSend.push({
             text,
           });
         }
+        if (messagesToSend.length === 0) {
+          return;
+        }
+
         // Reset attachments
         self.attachments = [];
         // Hide sheet
         self.sheetVisible = false;
         // Clear area
-        self.messagebar.clear();
+        self.messageText = '';
         // Focus area
         if (text.length) self.messagebar.focus();
         // Send message
@@ -253,10 +276,10 @@
         setTimeout(() => {
           const answer = self.answers[Math.floor(Math.random() * self.answers.length)];
           const person = self.people[Math.floor(Math.random() * self.people.length)];
-          self.messages.showTyping({
-            header: `${person.name} is typing`,
+          self.typingMessage = {
+            name: person.name,
             avatar: person.avatar,
-          });
+          };
           setTimeout(() => {
             self.messagesData.push({
               text: answer,
@@ -264,18 +287,11 @@
               name: person.name,
               avatar: person.avatar,
             });
-            self.messages.hideTyping();
+            self.typingMessage = null;
             self.responseInProgress = false;
           }, 4000);
         }, 1000);
-      }
+      },
     },
-    mounted() {
-      this.$f7ready((f7) => {
-        const self = this;
-        self.messagebar = self.$refs.messagebar.f7Messagebar;
-        self.messages = self.$refs.messages.f7Messages;
-      })
-    }
   };
 </script>

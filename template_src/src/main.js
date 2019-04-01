@@ -2,13 +2,13 @@
 import Vue from 'vue'
 
 // Import Framework7
-import Framework7 from 'framework7/framework7.esm.bundle.js';
+import Framework7 from 'framework7/framework7.esm.bundle';
 
 // Import Framework7 Vue
-import Framework7Vue from 'framework7-vue/framework7-vue.esm.bundle.js';
+import Framework7Vue from 'framework7-vue';
 
 // Import F7 Style
-import Framework7CSS from 'framework7/css/framework7.bundle.css'
+import Framework7CSS from 'framework7/css/framework7.bundle.min.css'
 
 // Import F7 iOS Icons
 import Framework7Icons from 'framework7-icons/css/framework7-icons.css'
@@ -18,6 +18,9 @@ import MaterialIcons from 'material-design-icons/iconfont/material-icons.css'
 
 // Import Fontawesome Theme Styles
 import FontAwesome from 'font-awesome/css/font-awesome.css'
+
+// Import fastClick
+import FastClick from 'fastclick';
 
 // Import App Custom Styles
 // import AppStyles from './assets/sass/main.scss'
@@ -42,5 +45,11 @@ export default new Vue({
   render: c => c('app'),
   components: {
     app
-  }
+  },
+  mounted() {
+    window.addEventListener('load', () => {
+        // run after everything is in-place
+        FastClick.attach(document.body);
+    })
+  },
 });
