@@ -11,7 +11,7 @@
 <script>
 // Import Routes...
 import { f7App, f7Panel, f7View, f7Statusbar } from 'framework7-vue';
-import routes from './routes.js'
+import routes from './routes.js';
 
 let theme = 'auto';
 if (document.location.search.indexOf('theme=') >= 0) {

@@ -26,11 +26,11 @@ You can start your new cordova project perfectly with this template.
 
 This template uses:
 * [Framework7 4](https://framework7.io)
-* [Vuejs 2](https://vuejs.org/)
+* [Vue 2](https://vuejs.org/)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Webpack 4](https://webpack.github.io/)
 * [Cordova](https://cordova.apache.org/)
-* [FontAwesome](http://fontawesome.io/)
+* [FontAwesome 5](http://fontawesome.io/)
 * [Babel Loader 7](https://github.com/babel/babel-loader)
 
 
