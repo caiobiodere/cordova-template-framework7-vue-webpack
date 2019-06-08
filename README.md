@@ -91,19 +91,19 @@ cordova create cordova-template com.template DefaultTemplate --template git://gi
 [Framework Single View v4 version](https://github.com/framework7io/framework7-template-single-view)
 
 ``` bash
-Still working
+Still under development
 ```
 
 [Framework Tabbed Views v4 version](https://github.com/framework7io/framework7-template-tabs)
 
 ``` bash
-Still working
+Still under development
 ```
 
 [Framework Split View v4 version](https://github.com/framework7io/framework7-template-split-view)
 
 ``` bash
-Still working
+Still under development
 ```
 
 Framework v3 version
