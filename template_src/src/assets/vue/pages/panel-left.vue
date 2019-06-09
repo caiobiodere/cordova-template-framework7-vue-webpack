@@ -2,7 +2,10 @@
   <f7-page>
     <f7-block-title>Left Panel</f7-block-title>
     <f7-block>
-      <p>This is a left side panel. You can close it by clicking outsite or on this link: <f7-link panel-close>close me</f7-link>. You can put here anything.</p>
+      <p>
+        This is a left side panel. You can close it by clicking outsite or on this link:
+        <f7-link panel-close>close me</f7-link>. You can put here anything.
+      </p>
     </f7-block>
     <f7-block-title>Main View Navigation</f7-block-title>
     <f7-list>
@@ -16,15 +19,7 @@
   </f7-page>
 </template>
 <script>
-  import { f7Page, f7Block, f7BlockTitle, f7List, f7ListItem, f7Link } from "framework7-vue";
-  export default {
-    components: {
-      f7Page, 
-      f7Block, 
-      f7BlockTitle, 
-      f7List, 
-      f7ListItem,
-      f7Link
-    }
-  };
+export default {
+  components: {}
+};
 </script>
