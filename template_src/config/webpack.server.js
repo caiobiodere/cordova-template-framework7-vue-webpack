@@ -10,29 +10,28 @@ module.exports = function() {
     module: {
       rules: [
         {
-          test: /\.css$/, loader: ['style-loader', 'css-loader']
+          test: /\.css$/,
+          loader: ['style-loader', 'css-loader']
         }
       ]
     },
-    plugins: [
-      new webpack.NamedModulesPlugin()
-    ],
+    plugins: [new webpack.NamedModulesPlugin()],
     devServer: {
-      contentBase: path.join(__dirname, "../www"),
+      contentBase: path.join(__dirname, '../www'),
       port: devServerPort,
       stats: { colors: true },
       watchOptions: {
-          aggregateTimeout: 300,
-          poll: 100,
-          ignored: /node_modules|platforms/,
+        aggregateTimeout: 300,
+        poll: 100,
+        ignored: /node_modules|platforms/
       },
       headers: {
-          "Access-Control-Allow-Origin": "*"
+        'Access-Control-Allow-Origin': '*'
       },
-      host: "0.0.0.0"
+      host: '0.0.0.0'
     },
     output: {
-      publicPath: "/"
+      publicPath: '/'
     }
   });
-}
+};
