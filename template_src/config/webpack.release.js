@@ -1,9 +1,7 @@
-const path = require('path');
 const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common');
 
 const CordovaHtmlOutputPlugin = require('../webpack/plugins/CordovaHtmlOutputPlugin.js');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');
 
