@@ -25,7 +25,7 @@
 You can start your new cordova project perfectly with this template.
 
 This template uses:
-* [Framework7 4](https://framework7.io)
+* [Framework7 5](https://framework7.io)
 * [Vue 2](https://vuejs.org/)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Webpack 4](https://webpack.github.io/)
@@ -82,25 +82,25 @@ boom! :boom: you have your brand new cordova / phonegap project with framework7 
 
 ## Installation using pre-defined templates
 
-Framework v4 version
+Framework v5 version
 
 ``` bash
 cordova create cordova-template com.template DefaultTemplate --template git://github.com/caiobiodere/cordova-template-framework7-vue-webpack.git#master
 ```
 
-[Framework Single View v4 version](https://github.com/framework7io/framework7-template-single-view)
+[Framework Single View v5 version](https://github.com/framework7io/framework7-template-single-view)
 
 ``` bash
 Still under development
 ```
 
-[Framework Tabbed Views v4 version](https://github.com/framework7io/framework7-template-tabs)
+[Framework Tabbed Views v5 version](https://github.com/framework7io/framework7-template-tabs)
 
 ``` bash
 Still under development
 ```
 
-[Framework Split View v4 version](https://github.com/framework7io/framework7-template-split-view)
+[Framework Split View v5 version](https://github.com/framework7io/framework7-template-split-view)
 
 ``` bash
 Still under development
